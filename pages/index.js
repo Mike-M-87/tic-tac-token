@@ -39,6 +39,7 @@ export default function Home() {
 
   return (
     <>
+      < h1 className="text-3xl m-5">Play</h1 >
       <div className="grid grid-cols-3 gap-4 w-[300px] m-5">
         {
           mainboard.map((value, index) => (
@@ -46,7 +47,6 @@ export default function Home() {
           ))
         }
       </div>
-      < h1 > dsfdfs</h1 >
     </>
   )
 }
