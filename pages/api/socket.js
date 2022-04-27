@@ -18,4 +18,4 @@ const SocketHandler = (req, res) => {
 
 }
 
-// export default SocketHandler
+export default SocketHandler

@@ -41,4 +41,4 @@ const Some = () => {
   )
 }
 
-// export default Some
+export default Some
