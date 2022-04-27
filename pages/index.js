@@ -114,12 +114,12 @@ export function Home() {
               {data &&
                 <tbody>
                   {data.lobby.map(({ id, stake, players }, index) => (
-                    <tr class="odd:bg-white even:bg-slate-100">
-                      <td>{id}</td>
+                    <tr key={id}>
+                      <td>{index}</td>
                       <td>${stake}</td>
                       <td>
                         {players.map((player, index) => (
-                          <span>{player.name}</span>
+                          <span key={index}>{player.name}</span>
                         ))}
                       </td>
                       <td><button className="btn btn-info btn-sm">Join</button></td>
@@ -137,12 +137,12 @@ export function Home() {
               CreateNewGame({ variables: { name: e.target["name"].value, stake: e.target["stake"].value } });
             }}>
               <button className="btn btn-dark" type="submit">Create</button>
-              <div class="form-floating my-3">
-                <input type="number" class="form-control" id="stake" placeholder="Enter Stake Prize" required />
+              <div className="form-floating my-3">
+                <input type="number" className="form-control" id="stake" placeholder="Enter Stake Prize" required />
                 <label htmlFor="stake">Stake</label>
               </div>
               <div className="form-floating my-3">
-                <input type="text" class="form-control" id="name" placeholder="Enter your name" required />
+                <input type="text" className="form-control" id="name" placeholder="Enter your name" required />
                 <label htmlFor="name">Name</label>
               </div>
             </form>
