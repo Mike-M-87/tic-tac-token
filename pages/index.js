@@ -1,7 +1,7 @@
-import Lobby from "./tiktak/lobby";
+import Login from "./tiktak/login";
 
 export default function Game() {
   return (
-    <Lobby />
+    <Login />
   )
 }
