@@ -1,53 +1,15 @@
-import { useEffect, useState } from "react"
-import { ApolloClient, ApolloProvider, gql, HttpLink, InMemoryCache, split, useMutation, useQuery, useSubscription } from '@apollo/client';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { CREATE_GAME, JOIN_GAME, LOBBY_QUERY, LOBBY_SUBSCRIPTION } from "../graphql/queries.js";
-import { getMainDefinition } from "@apollo/client/utilities";
-import Head from "next/head";
-import Styles from '../styles/Home.module.css'
-
-
-const wsLink = process.browser ? new WebSocketLink({ // if you instantiate in the server, the error will be thrown
-  uri: `ws://localhost:8080/query`,
-  options: {
-    reconnect: true,
-  }
-}) : null;
-
-const httplink = new HttpLink({
-  uri: 'http://localhost:8080/query',
-  credentials: 'same-origin'
-});
-
-
-const link = process.browser ? split(
-  ({ query }) => {
-    const { kind, operation } = getMainDefinition(query);
-    return kind === 'OperationDefinition' && operation === 'subscription';
-  },
-  wsLink,
-  httplink,
-) : httplink;
-
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache()
-});
+import React, { useEffect, useState } from "react"
 
 export default function Game() {
-
   return (
-    <ApolloProvider client={client}>
-      <Home />
-    </ApolloProvider>
+    <Home />
   )
 }
 
 export function Home() {
   const [mainboard, setBoard] = useState(Array(9).fill("."))
   const [current, setCurrent] = useState("X")
-
-  const [lobby, setLobby] = useState([])
+  const [data, SetData] = useState(null)
   const winstates = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
 
   function Play(e) {
@@ -87,40 +49,13 @@ export function Home() {
     return false
   }
 
-
-  const [CreateNewGame] = useMutation(CREATE_GAME)
-  const [JoinGame] = useMutation(JOIN_GAME)
-
   function OpenModal(n) {
     document.getElementById('exampleModalLabel').innerHTML = "Play With " + n;
   }
 
-
-  // const { data, loading, error, subscribeToMore } = useQuery(LOBBY_QUERY);
-
-  // subscribeToMore({
-  //   document: LOBBY_SUBSCRIPTION,
-  //   updateQuery: (prev, { subscriptionData }) => {
-  //     if (!subscriptionData.data) return prev;
-  //     const newData = subscriptionData.data.lobby;
-  //     return newData
-  //   }
-  // });
-
-  const { loading, error, data } = useSubscription(LOBBY_SUBSCRIPTION, {
-    onSubscriptionData: ({ data }) => {
-      console.log(data);
-    }
-  })
-
-
   return (
     <>
       <main className="container-fluid">
-        <p>{error ? "data error" : ""}</p>
-        <p>{loading ? "data loading" : ""}</p>
-        <p>{data ? "data success" : ""}</p>
-
         <div className="d-flex flex-wrap justify-content-around align-items-start">
           <div className="flex-grow-1 mx-5">
             <h3>LOBBY</h3>
@@ -147,11 +82,9 @@ export function Home() {
                       <td><button
                         className="btn btn-info btn-sm"
                         data-id={id}
-                        // data-bs-toggle="modal" data-bs-target="#joinModal"
                         onClick={(e) => {
                           e.preventDefault()
-                          // OpenModal(players[0].name)
-                          JoinGame({ variables: { gameId: id, playername: "mike" } })
+                          OpenModal(players[0].name)
                         }} >Join</button></td>
                     </tr>
                   ))}
@@ -161,11 +94,7 @@ export function Home() {
           </div>
 
           <div>
-
-            <form onSubmit={(e) => {
-              e.preventDefault()
-              CreateNewGame({ variables: { player: e.target["name"].value, stake: e.target["stake"].value } });
-            }}>
+            <form className="mt-1">
               <button className="btn btn-dark" type="submit">Create</button>
               <div className="form-floating my-3">
                 <input type="number" className="form-control" id="stake" placeholder="Enter Stake Prize" required />
@@ -176,17 +105,16 @@ export function Home() {
                 <label htmlFor="name">Name</label>
               </div>
             </form>
-
             <div className="grid-container">
-              {
-                mainboard.map((value, index) => (
-                  <button key={index} onClick={(e) => Play(e)} className="grid-item" value={index}>{value}</button>
-                ))
-              }
+              {mainboard.map((value, index) => (
+                <button key={index} onClick={(e) => Play(e)} className="grid-item" value={index}>{value}</button>
+              ))}
             </div>
           </div>
+
         </div>
       </main>
+
 
       <div className="modal fade" id="joinModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
