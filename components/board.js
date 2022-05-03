@@ -12,8 +12,6 @@ export default function Board() {
 
     e.target.disabled = true
 
-    console.log(CheckWin(board, current));
-
     if (CheckWin(board, current)) {
       alert("Player " + current + "  Wins")
       window.location.reload()

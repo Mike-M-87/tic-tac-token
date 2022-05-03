@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { myIp, serverPort, USERID, USERNAME } from "../constants";
 import Lobby from "../components/lobby";
 import Login from "./login";
+import Game from "../components/game";
 
 
 export let ws;
 
 
-export default function Game() {
+export default function Home() {
   const [userStatus, setUserStatus] = useState("lobby")
   const [allData, setAllData] = useState({
     lobbyInfo: [],
-    gameInfo: [],
+    gameInfo: {},
   })
 
   function connect(userId) {
@@ -33,7 +34,14 @@ export default function Game() {
     ws.onmessage = function (event) {
       let r = JSON.parse(event.data);
 
-      if (r.event == "game.info") { ; }
+      if (r.event == "game.info") {
+        setAllData(prevData => ({
+          ...prevData,
+          gameInfo: r.data
+        }));
+        setUserStatus("playing")
+      }
+
       if (r.newguy != undefined) { ; }
 
       if (r.meta != undefined) {
@@ -46,7 +54,7 @@ export default function Game() {
           lobbyInfo: lobbydata
         }));
       }
-     
+
 
       if (r.event == "lobby.info") {
         let lobbydata = []
@@ -70,8 +78,6 @@ export default function Game() {
     };
   }
 
-
-
   useEffect(() => {
     const isLogged = localStorage.getItem(USERID) && localStorage.getItem(USERNAME)
     if (!isLogged) {
@@ -84,10 +90,11 @@ export default function Game() {
 
   return (
     <>
+      <button className="btn btn-danger m-4" onClick={(e) => setUserStatus("lobby")}>EXIT TO LOBBY</button>
       {userStatus == "lobby" ?
-        <Lobby data={allData.lobbyInfo} />
+        <Lobby wsocket={ws} data={allData.lobbyInfo} />
         : userStatus == "playing" ?
-          <Game data={allData.gameInfo} /> : ''
+          <Game wsocket={ws} data={allData.gameInfo} /> : ''
       }
     </>
   )

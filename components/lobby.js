@@ -1,20 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { myIp, serverPort, USERID } from "../constants"
-import { ws } from "../pages";
-import Board from "./board"
 
 
-// {
-//   "Stauts": "created",
-//     "GameID": "9cbdcf",
-//       "HostUserId": "0.2799179715663529",
-//         "StakedAmount": 0.8772722554075285
-// }
-
-export default function Lobby({ data }) {
+export default function Lobby({ wsocket, data }) {
+  
   async function CreateGame(e) {
     e.preventDefault()
-
     let API_URL = `http://${myIp}:${serverPort}/create`;
 
     const data = JSON.stringify({
@@ -34,16 +25,16 @@ export default function Lobby({ data }) {
     };
 
     const rbody = await fetch(API_URL, payload);
-    let parsedResp = rbody.json;
-    console.log(parsedResp);
+    let parsedResp = rbody.json();
   }
 
+  
   async function JoinGame(gameId) {
     let subMessage = JSON.stringify({
       event: "sub.game",
       gameid: gameId,
     });
-    ws.send(subMessage);
+    wsocket.send(subMessage);
   }
 
 
@@ -84,7 +75,6 @@ export default function Lobby({ data }) {
                 <label htmlFor="stake">Stake</label>
               </div>
             </form>
-            <Board />
           </div>
 
         </div>
