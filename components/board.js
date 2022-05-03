@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
+import { useState } from "react"
 
-export default function Lobby() {
+export default function Board() {
   const [mainboard, setBoard] = useState(Array(9).fill("."))
   const [current, setCurrent] = useState("X")
   const winstates = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
@@ -11,11 +11,16 @@ export default function Lobby() {
     board[idx] = current
 
     e.target.disabled = true
-    setBoard(board)
 
-    if (!CheckWin(board, current) && !board.includes(".")) {
+    console.log(CheckWin(board, current));
+
+    if (CheckWin(board, current)) {
+      alert("Player " + current + "  Wins")
+      window.location.reload()
+
+    } else if (!board.includes(".")) {
       alert("Game Draw")
-      window.location.reload(false)
+      window.location.reload()
     }
 
     if (current == "X") {
@@ -24,9 +29,11 @@ export default function Lobby() {
     else {
       setCurrent("X")
     }
+    setBoard(board)
   }
 
   function CheckWin(cboard, move) {
+    let result = false
     winstates.forEach(s => {
       let count = 0
       s.forEach(v => {
@@ -35,22 +42,18 @@ export default function Lobby() {
         }
       })
       if (count >= 3) {
-        alert("Player " + current + "  Wins")
-        window.location.reload(false)
+        result = true
+        return result
       }
     });
-    return false
+    return result
   }
 
-
   return (
-    <main className="container mt-5 w-25 mx-auto">
-      <div className="grid-container">
-        {mainboard.map((value, index) => (
-          <button key={index} onClick={(e) => Play(e)} className="grid-item" value={index}>{value}</button>
-        ))}
-      </div>
-    </main>
+    <div className="grid-container">
+      {mainboard.map((value, index) => (
+        <button key={index} onClick={(e) => Play(e)} className="grid-item" value={index}>{value}</button>
+      ))}
+    </div>
   )
 }
-
