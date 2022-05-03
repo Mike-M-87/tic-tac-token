@@ -84,7 +84,7 @@ export default function Game() {
   useEffect(() => {
     const isLogged = localStorage.getItem(USERID) && localStorage.getItem(USERNAME)
     if (!isLogged) {
-      window.location.assign("/tiktak/login")
+      window.location.assign("/login")
     } else {
       connect(localStorage.getItem(USERID))
     }

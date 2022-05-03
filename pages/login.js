@@ -15,33 +15,32 @@ export default function Login() {
 
   return (
     <main className="container">
-      <div className="card w-50 rounded-lg shadow mx-auto my-5 p-5">
+      <div className="card w-100 rounded-lg shadow mx-auto my-5 p-5">
 
         <form className="p-5" onSubmit={(e) => LoginUser(e)}>
           <label htmlFor="name" className="form-label mb-3">Username: </label>
           <input type="text" className="form-control" id="name" required />
 
-          {/* <label htmlFor="password" className="form-label mt-3 mb-3">Password: </label>
-          <input type="password" className="form-control" id="password" required /> */}
+          <label htmlFor="password" className="form-label mt-3 mb-3">Password: </label>
+          <input type="password" className="form-control" id="password" disabled />
 
-          {/* <button type="button" disabled
+          <button type="button" disabled
             className="btn mt-3 text-lg text-muted text-decoration-underline">
             Forgot Password?
-          </button> */}
-
+          </button>
 
           <button
             type="submit"
             className={(loading ? " disabled " : " ") + "form-control py-2 mt-3 text-center btn btn-dark"}>
-            {loading ? <span className="spinner-border spinner-border-sm"></span> : "Sign in"}
+            {loading ? <span className="spinner-border spinner-border-sm"></span> : "Enter"}
           </button>
 
-          {/* <Link href="/tiktak/signup">
-            <button type="button"
-              className="btn mt-3 text-lg text-primary text-decoration-underline form-control">
+          <Link href="/tiktak/signup">
+            <button type="button" disabled
+              className="btn mt-3 text-lg text-muted text-decoration-underline bg-transparent form-control">
               Create Account Instead?
             </button>
-          </Link> */}
+          </Link>
 
         </form>
       </div>
