@@ -4,16 +4,15 @@ import Lobby from "../components/lobby";
 import Login from "./login";
 
 
-let ws;
+export let ws;
 
 
 export default function Game() {
   const [userStatus, setUserStatus] = useState("lobby")
   const [allData, setAllData] = useState({
-    lobbyInfo: null,
-    gameInfo: null,
+    lobbyInfo: [],
+    gameInfo: [],
   })
-
 
   function connect(userId) {
     if (typeof window == "undefined") { return }
@@ -33,48 +32,29 @@ export default function Game() {
 
     ws.onmessage = function (event) {
       let r = JSON.parse(event.data);
-      if (r.event == "game.info") {
-        setAllData(prevData => ({
-          ...prevData,
-          gameInfo: event.data
-        }));
-        // let gameInfo = document.getElementById("gameInfo");
-        // gameInfo.innerHTML = JSON.stringify(event.data, null, 2);
-      }
 
-      if (r.meta != undefined) {
-        setAllData(prevData => ({
-          ...prevData,
-          lobbyInfo: r.meta
-        }));
-        // lobby.innerHTML = "";
-        // for (const match of Object.entries(r.meta)) {
-        //   lobby.innerHTML += `<li>${match[1].GameID} <button onclick="subscribeToGame('${match[1].GameID}')"> Join </button></li>`;
-        // }
-      }
+      if (r.event == "game.info") { ; }
+      if (r.meta != undefined) { ; }
+      if (r.newguy != undefined) { ; }
 
       if (r.event == "lobby.info") {
+        let lobbydata = [...allData.lobbyInfo]
+        for (const match of Object.values(r.data)) {
+          lobbydata.push(match)
+        }
+        
         setAllData(prevData => ({
           ...prevData,
-          lobbyInfo: r.data
+          lobbyInfo: lobbydata
         }));
-        // lobby.innerHTML = "";
-        // for (const match of Object.entries(r.data)) {
-        //   lobby.innerHTML += `<li>${match[1].GameID} <button onclick="subscribeToGame('${match[1].GameID}')"> Join </button></li>`;
-        // }
-      }
-
-      if (r.newguy != undefined) {
-        // lobby.innerHTML += `<li>${r.newguy}</li>`
       }
     };
 
+
     ws.onclose = function (event) {
       console.log("❌ Connection closed");
-
-      // So some cool way to ensure we are always connected to our websocket connetion
       setTimeout(function () {
-        // connect();
+        connect();
       }, 1000);
     };
   }
@@ -101,3 +81,4 @@ export default function Game() {
     </>
   )
 }
+

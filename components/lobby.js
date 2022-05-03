@@ -1,37 +1,34 @@
 import React, { useEffect, useState } from "react"
 import { myIp, serverPort, USERID } from "../constants"
+import { ws } from "../pages";
 import Board from "./board"
 
 
+// {
+//   "Stauts": "created",
+//     "GameID": "9cbdcf",
+//       "HostUserId": "0.2799179715663529",
+//         "StakedAmount": 0.8772722554075285
+// }
 
 export default function Lobby({ data }) {
-  const [matches, setMatches] = useState([])
 
-  useEffect(() => {
-    if (data) {
-      const currentMatches = [...matches]
-      for (const match of Object.entries(data)) {
-        currentMatches.push(match)
-      }
-      setMatches(currentMatches)
-    }
-  }, [])
+  // console.log(data);
 
-
-  async function createGame(e) {
+  async function CreateGame(e) {
     e.preventDefault()
 
     let API_URL = `http://${myIp}:${serverPort}/create`;
 
     const data = JSON.stringify({
       userId: localStorage.getItem(USERID),
-      amount: e.target["stake"].value,
+      amount: parseFloat(e.target["stake"].value),
     });
 
     const payload = {
       method: "post",
       body: data,
-      mode: "no-cors",
+      mode: "cors",
       headers: {
         Authorization: `Bearer <<JWT STUFF GO HERE>>`,
         "Content-Type": "application/json",
@@ -40,16 +37,20 @@ export default function Lobby({ data }) {
     };
 
     console.log(payload);
-    
+
     const rbody = await fetch(API_URL, payload);
     let parsedResp = rbody.json;
     console.log(parsedResp);
   }
 
-
-  function OpenModal(n) {
-    document.getElementById('exampleModalLabel').innerHTML = "Play With " + n;
+  async function JoinGame(gameId) {
+    let subMessage = JSON.stringify({
+      event: "sub.game",
+      gameid: gameId,
+    });
+    ws.send(subMessage);
   }
+
 
   return (
     <>
@@ -63,29 +64,25 @@ export default function Lobby({ data }) {
                 <tr>
                   <th>Game ID</th>
                   <th>Stake Prize</th>
-                  <th>Player</th>
+                  <th>Host</th>
                   <th>Play</th>
                 </tr>
               </thead>
-              {matches &&
+              {data &&
                 <tbody>
-                  {matches.map(({ id, stake, players }, index) => (
-                    <tr key={id}>
-                      <td>{index}</td>
-                      <td>${stake}</td>
-                      <td>
-                        {players.map((player, index) => (
-                          <span key={index}>{player.name}</span>
-                        ))}
-                      </td>
-                      <td><button className="btn btn-info btn-sm">Join</button></td>
+                  {data.map(({ Stauts, GameID, HostUserId, StakedAmount }) => (
+                    <tr key={GameID}>
+                      <td>{GameID}</td>
+                      <td>${StakedAmount}</td>
+                      <td>{HostUserId}</td>
+                      <td><button className="btn btn-info btn-sm" onClick={(e) => JoinGame(GameID)}>Join</button></td>
                     </tr>
                   ))}</tbody>}
             </table>
           </div>
 
           <div>
-            <form className="mt-1" onSubmit={(e) => createGame(e)}>
+            <form className="mt-1" onSubmit={(e) => CreateGame(e)}>
               <button className="btn btn-dark" type="submit">Create</button>
               <div className="form-floating my-3">
                 <input type="number" className="form-control" id="stake" placeholder="Enter Stake Prize" required />
