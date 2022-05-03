@@ -13,7 +13,7 @@ import Board from "./board"
 
 export default function Lobby({ data }) {
 
-  // console.log(data);
+  console.log(data);
 
   async function CreateGame(e) {
     e.preventDefault()

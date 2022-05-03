@@ -42,7 +42,7 @@ export default function Game() {
         for (const match of Object.values(r.data)) {
           lobbydata.push(match)
         }
-        
+
         setAllData(prevData => ({
           ...prevData,
           lobbyInfo: lobbydata
@@ -54,7 +54,7 @@ export default function Game() {
     ws.onclose = function (event) {
       console.log("❌ Connection closed");
       setTimeout(function () {
-        connect();
+        connect(localStorage.getItem(USERID));
       }, 1000);
     };
   }
