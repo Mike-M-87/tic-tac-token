@@ -12,9 +12,6 @@ import Board from "./board"
 // }
 
 export default function Lobby({ data }) {
-
-  console.log(data);
-
   async function CreateGame(e) {
     e.preventDefault()
 
@@ -35,8 +32,6 @@ export default function Lobby({ data }) {
         "Content-Length": data.length,
       },
     };
-
-    console.log(payload);
 
     const rbody = await fetch(API_URL, payload);
     let parsedResp = rbody.json;

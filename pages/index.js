@@ -34,11 +34,22 @@ export default function Game() {
       let r = JSON.parse(event.data);
 
       if (r.event == "game.info") { ; }
-      if (r.meta != undefined) { ; }
       if (r.newguy != undefined) { ; }
 
+      if (r.meta != undefined) {
+        let lobbydata = []
+        for (const match of Object.values(r.meta)) {
+          lobbydata.push(match)
+        }
+        setAllData(prevData => ({
+          ...prevData,
+          lobbyInfo: lobbydata
+        }));
+      }
+     
+
       if (r.event == "lobby.info") {
-        let lobbydata = [...allData.lobbyInfo]
+        let lobbydata = []
         for (const match of Object.values(r.data)) {
           lobbydata.push(match)
         }
