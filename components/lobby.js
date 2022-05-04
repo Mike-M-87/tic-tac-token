@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react"
-import { myIp, serverPort, USERID } from "../constants"
+import { myIp, serverPort, USERID, USERNAME } from "../constants"
 
 
 
@@ -12,9 +12,11 @@ export default function Lobby({ wsocket, data }) {
     e.preventDefault()
     let API_URL = `https://${myIp}/create`;
     // let API_URL = `http://${myIp}:${serverPort}/create`;
+
     const data = JSON.stringify({
       userId: localStorage.getItem(USERID),
       amount: parseFloat(e.target["stake"].value),
+      username: localStorage.getItem(USERNAME)
     });
     const payload = {
       method: "post",
@@ -39,17 +41,16 @@ export default function Lobby({ wsocket, data }) {
   return (
     <>
       <main className="container-fluid">
-        <div className="d-flex flex-wrap justify-content-around align-items-start">
+        <div className="d-lg-flex mt-4 justify-content-around align-items-start">
 
-          <div className="mt-4">
-            <form onSubmit={(e) => CreateGame(e)}>
-              <button className="btn btn-dark" type="submit">Create</button>
-              <div className="form-floating my-3">
-                <input type="number" className="form-control" id="stake" placeholder="Enter Stake Prize" required />
-                <label htmlFor="stake">Stake</label>
-              </div>
-            </form>
-          </div>
+
+          <form onSubmit={(e) => CreateGame(e)}>
+            <button className="btn btn-dark" type="submit">Create</button>
+            <div className="form-floating my-3">
+              <input type="number" className="form-control" id="stake" placeholder="Enter Stake Prize" required />
+              <label htmlFor="stake">Stake</label>
+            </div>
+          </form>
 
 
           <div className="flex-grow-1 mx-5">
@@ -69,11 +70,11 @@ export default function Lobby({ wsocket, data }) {
               </thead>
               {data &&
                 <tbody>
-                  {searcher(data, searchTerm).map(({ Status, GameID, HostUserId, StakedAmount }) => (
+                  {searcher(data, searchTerm).map(({ Status, GameID, HostUserId, HostUserName, StakedAmount }) => (
                     <tr key={GameID}>
                       <td>{GameID}</td>
                       <td>${StakedAmount}</td>
-                      <td>{HostUserId}</td>
+                      <td>{HostUserName}</td>
                       <td>
                         <Link href={`/join/${GameID}`}>
                           <button className="btn btn-info btn-sm">Join</button>

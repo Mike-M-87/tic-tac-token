@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { myIp, serverPort, USERID, USERNAME } from "../../constants";
 
 let ws
-let mydetails = { name: '', id: '' }
 
 export async function getServerSideProps({ params }) {
   let id = params.game
@@ -29,8 +28,8 @@ export default function Game({ id }) {
         let subMessage = JSON.stringify({
           event: "sub.game",
           gameid: id,
+          opponent: localStorage.getItem(USERNAME)
         });
-
         if (ws.readyState) {
           ws.send(subMessage);
         }
@@ -55,35 +54,52 @@ export default function Game({ id }) {
 
   useEffect(() => {
     connect()
-    mydetails.id = localStorage.getItem(USERID)
-    mydetails.name = localStorage.getItem(USERNAME)
   }, [])
+
+  function Play(e, idx) {
+    if (id) {
+      let subMessage = JSON.stringify({
+        event: "sub.play",
+        gameid: id,
+        player: localStorage.getItem(USERID),
+        playposition: idx.toString()
+      });
+
+      if (ws.readyState) {
+        ws.send(subMessage);
+        e.target.disable = true
+      }
+    }
+  }
 
   return (
     <main className="container-fluid mx-auto">
-      {/* <Link href={"/"} <button className="btn btn-danger m-4" onClick={(e) => setUserStatus("lobby")}>EXIT TO LOBBY</button> */}
-
-      <p>MY ID : {mydetails.id}</p>
-      <p>MY NAME : {mydetails.name}</p>
-
+      <Link href={"/"} ><button className="btn btn-danger m-4">Rage Quit</button></Link>
       {data &&
-        <div className="row mx-5">
-          <div className="col-3">
-            <h2>Game: </h2><span> {data.GameID}</span>
-            <h3>Host: </h3><span>{data.HostUserId}</span>
-            <h3>Opponent: </h3><span>{data.OpponentUserId}</span>
-            <h3>Stake: </h3><span> {data.StakedAmount}</span>
+
+        <div className="d-lg-flex justify-content-around">
+          <div className="d-flex flex-column gap-2">
+            <h2>Game </h2><span> {data.GameID}</span>
+            <h3>Host </h3><span>{data.HostUserName}</span>
+            <h3>Opponent </h3><span>{data.OpponentUserName}</span>
+            <h3>Stake </h3><span> ${data.StakedAmount}</span>
+            <h4>Invite Others to watch</h4>
+            <input className="orm-control" readonly="readonly" onClick={(e) => {
+              e.target.select();
+              document.execCommand('copy');
+            }} value={window.location.href} />
           </div>
 
-          <div className="col-md-8">
+          <div>
             {data.GameBoard &&
               <div className="grid-container">
                 {data.GameBoard.map((value, index) => (
-                  <button key={index} className="grid-item" value={index}>{value}</button>
+                  <button key={index} className="grid-item" onClick={(e) => Play(e, index)} value={index}>{value == 0 ? "X" : value == 1 ? "O" : null}</button>
                 ))}
               </div>}
           </div>
-        </div>}
-    </main>
+        </div>
+      }
+    </main >
   )
 }
