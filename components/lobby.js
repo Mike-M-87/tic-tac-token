@@ -69,7 +69,7 @@ export default function Lobby({ wsocket, data }) {
               </thead>
               {data &&
                 <tbody>
-                  {searcher(data, searchTerm).map(({ Stauts, GameID, HostUserId, StakedAmount }) => (
+                  {searcher(data, searchTerm).map(({ Status, GameID, HostUserId, StakedAmount }) => (
                     <tr key={GameID}>
                       <td>{GameID}</td>
                       <td>${StakedAmount}</td>
