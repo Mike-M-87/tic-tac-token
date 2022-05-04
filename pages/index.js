@@ -2,23 +2,18 @@ import { useEffect, useState } from "react";
 import { myIp, serverPort, USERID, USERNAME } from "../constants";
 import Lobby from "../components/lobby";
 import Login from "./login";
-import Game from "../components/game";
 
 
 export let ws;
 
 
 export default function Home() {
-  const [userStatus, setUserStatus] = useState("lobby")
-  const [allData, setAllData] = useState({
-    lobbyInfo: [],
-    gameInfo: {},
-  })
+  const [lobbyData, setLobbyData] = useState([])
 
   function connect(userId) {
     if (typeof window == "undefined") { return }
-
-    let url = `ws://${myIp}:${serverPort}/ws/${userId}`;
+    let url = `wss://${myIp}/ws/${userId}`;
+    // let url = `ws://${myIp}:${serverPort}/ws/${userId}`;
     ws = new WebSocket(url);
 
     ws.onopen = function (event) {
@@ -34,41 +29,27 @@ export default function Home() {
     ws.onmessage = function (event) {
       let r = JSON.parse(event.data);
 
-      if (r.event == "game.info") {
-        setAllData(prevData => ({
-          ...prevData,
-          gameInfo: r.data
-        }));
-        setUserStatus("playing")
-      }
+      console.log(r)
 
+      if (r.event == "game.info") { ; }
       if (r.newguy != undefined) { ; }
 
-      if (r.meta != undefined) {
-        let lobbydata = []
+      if (r.event == "new.game") {
+        let lobby = []
         for (const match of Object.values(r.meta)) {
-          lobbydata.push(match)
+          lobby.push(match)
         }
-        setAllData(prevData => ({
-          ...prevData,
-          lobbyInfo: lobbydata
-        }));
+        setLobbyData(lobby)
       }
-
 
       if (r.event == "lobby.info") {
-        let lobbydata = []
+        let lobby = []
         for (const match of Object.values(r.data)) {
-          lobbydata.push(match)
+          lobby.push(match)
         }
-
-        setAllData(prevData => ({
-          ...prevData,
-          lobbyInfo: lobbydata
-        }));
+        setLobbyData(lobby)
       }
     };
-
 
     ws.onclose = function (event) {
       console.log("❌ Connection closed");
@@ -87,15 +68,9 @@ export default function Home() {
     }
   }, [])
 
-
   return (
     <>
-      <button className="btn btn-danger m-4" onClick={(e) => setUserStatus("lobby")}>EXIT TO LOBBY</button>
-      {userStatus == "lobby" ?
-        <Lobby wsocket={ws} data={allData.lobbyInfo} />
-        : userStatus == "playing" ?
-          <Game wsocket={ws} data={allData.gameInfo} /> : ''
-      }
+      <Lobby wsocket={ws} data={lobbyData} />
     </>
   )
 }

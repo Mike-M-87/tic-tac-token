@@ -32,10 +32,3 @@ a {
   font-size: 30px;
   text-align: center;
 }
-
-@media only screen and (max-width: 800px) {
-  .grid-container {
-    /* height: 100%; */
-    /* width: 100%; */
-  }
-}
