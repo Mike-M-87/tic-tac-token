@@ -15,9 +15,9 @@ export default function Login() {
 
   return (
     <main className="container">
-      <div className="card w-100 rounded-lg shadow mx-auto my-5 p-5">
+      <div className="card shadow login">
 
-        <form className="p-5" onSubmit={(e) => LoginUser(e)}>
+        <form onSubmit={(e) => LoginUser(e)}>
           <label htmlFor="name" className="form-label mb-3">Username: </label>
           <input type="text" className="form-control" id="name" required />
 

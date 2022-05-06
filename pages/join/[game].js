@@ -28,7 +28,7 @@ export default function Game({ id }) {
         let subMessage = JSON.stringify({
           event: "sub.game",
           gameid: id,
-          opponent: localStorage.getItem(USERNAME)
+          opponent: localStorage.getItem(USERNAME) ? localStorage.getItem(USERNAME) : "",
         });
         if (ws.readyState) {
           ws.send(subMessage);
@@ -41,6 +41,11 @@ export default function Game({ id }) {
       console.log(r);
       if (r.event == "game.info" && r.data.GameID == id) {
         setData(r.data);
+        if (r.data.Winner !== "") {
+          alert("Winner is " + r.data.Winner)
+        }
+      } else if (r.event == "error.info") {
+        alert(r.error)
       }
     }
 
@@ -57,7 +62,7 @@ export default function Game({ id }) {
   }, [])
 
   function Play(e, idx) {
-    if (id) {
+    if (id && data.Winner == "") {
       let subMessage = JSON.stringify({
         event: "sub.play",
         gameid: id,
@@ -83,6 +88,7 @@ export default function Game({ id }) {
             <h3>Host </h3><span>{data.HostUserName}</span>
             <h3>Opponent </h3><span>{data.OpponentUserName}</span>
             <h3>Stake </h3><span> ${data.StakedAmount}</span>
+            <h3>Winner </h3><span> {data.Winner}</span>
             <h4>Invite Others to watch</h4>
             <input className="orm-control" readonly="readonly" onClick={(e) => {
               e.target.select();

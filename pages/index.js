@@ -65,6 +65,7 @@ export default function Home() {
       window.location.assign("/login")
     } else {
       connect(localStorage.getItem(USERID))
+      window.location.assign("/lobby")
     }
   }, [])
 
