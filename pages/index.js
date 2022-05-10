@@ -78,6 +78,7 @@ export default function Home() {
   return (
     <>
       <p>{msg}</p>
+      <p className="text-center"></p>
       <Lobby wsocket={ws} data={lobbyData} />
     </>
   )

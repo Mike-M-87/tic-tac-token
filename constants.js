@@ -7,3 +7,4 @@ export const serverPort = "8090";
 export const createGameURL = `http://${myIp}:${serverPort}/create`;
 export const loginURL = `http://${myIp}:${serverPort}/login`
 export const signupURL = `http://${myIp}:${serverPort}/signup`
+export const DetailsURL =  `http://${myIp}:${serverPort}/user`

@@ -67,7 +67,8 @@ export default function Game({ id }) {
   function Play(e, idx) {
     if (id) {
       if (data.Winner != "") {
-        alert(data.Winner + " already won")
+        let name = localStorage.getItem(USERNAME) == data.Winner ? "You" : data.Winner
+        alert(name + " already won")
         return
       }
       let subMessage = JSON.stringify({
@@ -79,7 +80,6 @@ export default function Game({ id }) {
 
       if (ws.readyState) {
         ws.send(subMessage);
-        e.target.disable = true
       }
     }
   }
@@ -96,6 +96,7 @@ export default function Game({ id }) {
     if (ws.readyState) {
       ws.send(subMessage);
     }
+    e.target["msg"].value = ""
   }
 
   function updateScroll() {
@@ -123,7 +124,7 @@ export default function Game({ id }) {
 
             <div className="d-flex justify-content-center">
               <h4>Winner : </h4>
-              <p className="mx-3"> {data.Winner || <div className="spinner-border"></div>}</p>
+              <h4 className="mx-3"> {data.Winner || <div className="spinner-border"></div>}</h4>
             </div>
 
             <h4>Invite Others to watch</h4>
@@ -138,7 +139,7 @@ export default function Game({ id }) {
             {data.GameBoard &&
               <div className="grid-container">
                 {data.GameBoard.map((value, index) => (
-                  <button key={index} className="grid-item" onClick={(e) => Play(e, index)}>{value == 0 ? "X" : value == 1 ? "O" : " "}</button>
+                  <button key={index} className="grid-item" onClick={(e) => Play(index)}>{value == 0 ? "X" : value == 1 ? "O" : "-"}</button>
                 ))}
               </div>
             }
@@ -156,14 +157,14 @@ export default function Game({ id }) {
               <dl className="chatlist" id="mychat">
                 {data.Chat && data.Chat.map(({ SenderName, Text }, index) => (
                   <div key={index}>
-                    <dt>{SenderName == localStorage.getItem(USERNAME) ? "You" : SenderName}</dt>
+                    <dt className={SenderName == localStorage.getItem(USERNAME) ? "text-primary" : ""}>{SenderName == localStorage.getItem(USERNAME) ? "You" : SenderName}</dt>
                     <dd className="mx-1">{Text}</dd>
                   </div>
                 ))}
               </dl>
               <form onSubmit={(e) => SendMessage(e)} className="d-flex">
                 <input id="msg" className="form-control" type="text" required />
-                <button className="btn btn-dark" type="submit">Send</button>
+                <button className="btn btn-dark" type="submit"><span class="material-icons">send</span></button>
               </form>
             </div>
 
@@ -171,9 +172,7 @@ export default function Game({ id }) {
 
 
           <button className="float-end mx-5 btn rounded-circle btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatbox">
-            <span className="material-icons pt-2">
-              chat_bubble
-            </span>
+            <span className="material-icons pt-2">chat_bubble</span>
           </button>
         </>
       }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { _makeRequest } from "../components/network";
-import { signupURL } from "../constants";
+import { signupURL, USERID, USERNAME, USERTOKEN } from "../constants";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false)
