@@ -35,7 +35,7 @@ export async function _makeRequest({ url, reqBody }) {
     }
   } catch (error) {
     console.log(error);
-    result.errorMessage = "try catch error"
+    result.errorMessage = "server error"
     return result
   }
   return result
