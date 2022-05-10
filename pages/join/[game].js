@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { myIp, serverPort, USERID, USERNAME } from "../../constants";
+import { myIp, serverPort, USERID, USERNAME, USERTOKEN } from "../../constants";
 
 let ws
 
@@ -18,8 +18,8 @@ export default function Game({ id }) {
 
   function connect() {
     if (typeof window == "undefined") { return }
-    let url = `wss://${myIp}/ws/${localStorage.getItem(USERID)}`;
-    // let url = `ws://${myIp}:${serverPort}/ws/${localStorage.getItem(USERID)}`;
+
+    let url = `ws://${myIp}:${serverPort}/ws/${localStorage.getItem(USERID)}`;
     ws = new WebSocket(url);
 
     ws.onopen = function (event) {
@@ -38,15 +38,13 @@ export default function Game({ id }) {
 
     ws.onmessage = function (event) {
       let r = JSON.parse(event.data);
-      console.log(r);
+      console.log("gamer r", r);
       if (r.event == "game.info" && r.data.GameID == id) {
         setData(r.data);
-        if (r.data.Winner !== "") {
-          alert("Winner is " + r.data.Winner)
-        }
       } else if (r.event == "error.info") {
         alert(r.error)
       }
+      updateScroll()
     }
 
     ws.onclose = function (event) {
@@ -58,11 +56,20 @@ export default function Game({ id }) {
   }
 
   useEffect(() => {
+    const isLogged = localStorage.getItem(USERID) && localStorage.getItem(USERNAME) && localStorage.getItem(USERTOKEN)
+    if (!isLogged) {
+      window.location.assign("/login")
+    }
     connect()
   }, [])
 
+
   function Play(e, idx) {
-    if (id && data.Winner == "") {
+    if (id) {
+      if (data.Winner != "") {
+        alert(data.Winner + " already won")
+        return
+      }
       let subMessage = JSON.stringify({
         event: "sub.play",
         gameid: id,
@@ -77,34 +84,98 @@ export default function Game({ id }) {
     }
   }
 
+  function SendMessage(e) {
+    e.preventDefault()
+    let subMessage = JSON.stringify({
+      event: "sub.chat",
+      gameid: id,
+      sender: localStorage.getItem(USERNAME),
+      text: e.target["msg"].value
+    });
+
+    if (ws.readyState) {
+      ws.send(subMessage);
+    }
+  }
+
+  function updateScroll() {
+    var element = document.getElementById("mychat");
+    if (element) {
+      element.scrollTop = element.scrollHeight;
+    }
+  }
+
   return (
-    <main className="container-fluid mx-auto">
+    <main className="container-fluid gamewindow bg-black text-white mx-auto">
       <Link href={"/"} ><button className="btn btn-danger m-4">Rage Quit</button></Link>
       {data &&
+        <>
 
-        <div className="d-lg-flex justify-content-around">
-          <div className="d-flex flex-column gap-2">
-            <h2>Game </h2><span> {data.GameID}</span>
-            <h3>Host </h3><span>{data.HostUserName}</span>
-            <h3>Opponent </h3><span>{data.OpponentUserName}</span>
-            <h3>Stake </h3><span> ${data.StakedAmount}</span>
-            <h3>Winner </h3><span> {data.Winner}</span>
+          <div className="d-grid gap-1">
+            <h3 className="text-center">Game {data.GameID}</h3>
+
+            <div className="d-flex flex-wrap justify-content-around">
+              <h3>Host : {data.HostUserName}</h3>
+              <span className="lead">Plays</span>
+              <h4>Opponent : {data.OpponentUserName}</h4>
+              <h4>Stake ${data.StakedAmount}</h4>
+            </div>
+
+            <div className="d-flex justify-content-center">
+              <h4>Winner : </h4>
+              <p className="mx-3"> {data.Winner || <div className="spinner-border"></div>}</p>
+            </div>
+
             <h4>Invite Others to watch</h4>
-            <input className="orm-control" readonly="readonly" onClick={(e) => {
+            <input className="form-control" readOnly onClick={(e) => {
               e.target.select();
               document.execCommand('copy');
             }} value={window.location.href} />
+
           </div>
 
-          <div>
+          <div className="my-4">
             {data.GameBoard &&
               <div className="grid-container">
                 {data.GameBoard.map((value, index) => (
-                  <button key={index} className="grid-item" onClick={(e) => Play(e, index)} value={index}>{value == 0 ? "X" : value == 1 ? "O" : null}</button>
+                  <button key={index} className="grid-item" onClick={(e) => Play(e, index)}>{value == 0 ? "X" : value == 1 ? "O" : " "}</button>
                 ))}
-              </div>}
+              </div>
+            }
           </div>
-        </div>
+
+
+          <div className="offcanvas bg-dark offcanvas-end my-4 mx-3 rounded-3" id="chatbox">
+
+            <div className="offcanvas-header">
+              <h3 className="offcanvas-title">Game Chat</h3>
+              <button type="button" className="btn-close text-white" data-bs-dismiss="offcanvas"></button>
+            </div>
+
+            <div className="offcanvas-body">
+              <dl className="chatlist" id="mychat">
+                {data.Chat && data.Chat.map(({ SenderName, Text }, index) => (
+                  <div key={index}>
+                    <dt>{SenderName == localStorage.getItem(USERNAME) ? "You" : SenderName}</dt>
+                    <dd className="mx-1">{Text}</dd>
+                  </div>
+                ))}
+              </dl>
+              <form onSubmit={(e) => SendMessage(e)} className="d-flex">
+                <input id="msg" className="form-control" type="text" required />
+                <button className="btn btn-dark" type="submit">Send</button>
+              </form>
+            </div>
+
+          </div>
+
+
+          <button className="float-end mx-5 btn rounded-circle btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatbox">
+            <span className="material-icons pt-2">
+              chat_bubble
+            </span>
+          </button>
+        </>
       }
     </main >
   )

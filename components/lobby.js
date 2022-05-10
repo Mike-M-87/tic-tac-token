@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react"
-import { myIp, serverPort, USERID, USERNAME } from "../constants"
+import { createGameURL, myIp, serverPort, USERID, USERNAME } from "../constants"
+import { _makeRequest } from "./network";
 
 
 
@@ -10,38 +11,24 @@ export default function Lobby({ wsocket, data }) {
 
   async function CreateGame(e) {
     e.preventDefault()
-    let API_URL = `https://${myIp}/create`;
-    // let API_URL = `http://${myIp}:${serverPort}/create`;
-
-    const data = JSON.stringify({
+    const body = {
       userId: localStorage.getItem(USERID),
       amount: parseFloat(e.target["stake"].value),
       username: localStorage.getItem(USERNAME)
-    });
-    const payload = {
-      method: "post",
-      body: data,
-      mode: "cors",
-      headers: {
-        Authorization: `Bearer <<JWT STUFF GO HERE>>`,
-        "Content-Type": "application/json",
-        "Content-Length": data.length,
-      },
     };
 
-    try {
-      const rbody = await fetch(API_URL, payload);
-      let parsedResp = await rbody.json();
-      window.location.assign("/join/" + parsedResp.GameID)
-    } catch (error) {
-      console.error(error);
+    const response = await _makeRequest({ url: createGameURL, reqBody: body })
+    if (response.success) {
+      window.location.assign("/join/" + response.body.GameID)
+    } else {
+      alert(response.errorMessage)
     }
-
   }
 
   const searcher = (arr, filterKey) => {
     return arr.filter((obj) => JSON.stringify(obj).includes(filterKey));
   }
+
 
   return (
     <>

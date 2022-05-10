@@ -1,43 +1,61 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { USERID, USERNAME } from "../constants";
+import { _makeRequest } from "../components/network";
+import { loginURL, USERID, USERNAME, USERTOKEN } from "../constants";
 
 
 export default function Login() {
   const [loading, setLoading] = useState(false)
+  const [err, setErr] = useState('')
 
-  function LoginUser(e) {
+  async function LoginUser(e) {
     e.preventDefault()
-    localStorage.setItem(USERID, Math.random())
-    localStorage.setItem(USERNAME, e.target["name"].value)
-    window.location.assign("/")
+    setLoading(true)
+    setErr('')
+
+    const body = {
+      username: e.target["name"].value,
+      password: e.target["password"].value
+    };
+
+    const response = await _makeRequest({ url: loginURL, reqBody: body })
+    if (response.success) {
+      localStorage.setItem(USERID, response.body.userId)
+      localStorage.setItem(USERTOKEN, response.body.token)
+      localStorage.setItem(USERNAME,response.body.username)
+      window.location.assign("/")
+    } else if (!response.success) {
+      setErr(response.errorMessage)
+    }
+    setLoading(false)
   }
 
   return (
     <main className="container">
       <div className="card shadow login">
 
-        <form onSubmit={(e) => LoginUser(e)}>
-          <label htmlFor="name" className="form-label mb-3">Username: </label>
+        <form onSubmit={(e) => LoginUser(e)} className="d-grid gap-3">
+          <p className="text-danger">{err}</p>
+          <label htmlFor="name" className="form-label">Username: </label>
           <input type="text" className="form-control" id="name" required />
 
-          <label htmlFor="password" className="form-label mt-3 mb-3">Password: </label>
-          <input type="password" className="form-control" id="password" disabled />
+          <label htmlFor="password" className="form-label">Password: </label>
+          <input type="password" className="form-control" id="password" />
 
           <button type="button" disabled
-            className="btn mt-3 text-lg text-muted text-decoration-underline">
+            className="btn text-lg text-muted text-decoration-underline">
             Forgot Password?
           </button>
 
           <button
             type="submit"
-            className={(loading ? " disabled " : " ") + "form-control py-2 mt-3 text-center btn btn-dark"}>
+            className={(loading ? " disabled " : " ") + "form-control py-2 text-center btn btn-dark"}>
             {loading ? <span className="spinner-border spinner-border-sm"></span> : "Enter"}
           </button>
 
-          <Link href="/tiktak/signup">
-            <button type="button" disabled
-              className="btn mt-3 text-lg text-muted text-decoration-underline bg-transparent form-control">
+          <Link href="/signup">
+            <button type="button"
+              className="btn text-lg text-primary text-decoration-underline bg-transparent form-control">
               Create Account Instead?
             </button>
           </Link>

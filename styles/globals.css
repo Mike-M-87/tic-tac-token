@@ -41,11 +41,29 @@ a {
   padding: 5%;
 }
 
+.chatlist {
+  height: 90%;
+  overflow: scroll;
+}
+
+.chatlist::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chatlist::-webkit-scrollbar-thumb {
+  background-color: #07ac6d;
+  border-radius: 20px;
+}
+
+.gamewindow{
+  height: 100vh;
+}
+
 @media only screen and (max-width: 800px) {
   .grid-container {
     width: 100%;
   }
-  .login{
+  .login {
     width: 100%;
   }
 }

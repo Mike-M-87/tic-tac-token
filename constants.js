@@ -1,5 +1,9 @@
 export const USERID = "userId"
 export const USERNAME = "username"
-// export const myIp = "tik-tak-toe-server.herokuapp.com";
+export const USERTOKEN = "token"
+// export const myIp = "ngameagames.io";
 export const myIp = "localhost";
 export const serverPort = "8090";
+export const createGameURL = `http://${myIp}:${serverPort}/create`;
+export const loginURL = `http://${myIp}:${serverPort}/login`
+export const signupURL = `http://${myIp}:${serverPort}/signup`
