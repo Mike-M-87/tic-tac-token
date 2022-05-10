@@ -48,7 +48,7 @@ export default function SignUp() {
           </button>
 
 
-          <Link href="/login">
+          <Link passHref  href="/login">
             <button type="button"
               className="btn text-lg text-primary text-decoration-underline form-control">
               Login Instead?

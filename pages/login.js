@@ -53,7 +53,7 @@ export default function Login() {
             {loading ? <span className="spinner-border spinner-border-sm"></span> : "Enter"}
           </button>
 
-          <Link href="/signup">
+          <Link passHref  href="/signup">
             <button type="button"
               className="btn text-lg text-primary text-decoration-underline bg-transparent form-control">
               Create Account Instead?

@@ -51,7 +51,7 @@ export default function Lobby({ wsocket, data }) {
       <main className="container-fluid">
 
         <div className='gap-3 d-flex justify-content-end align-items-center'>
-          <span class="material-icons">face</span>
+          <span className="material-icons">face</span>
 
           <div className='text-start p-1'>
             <h6>{details && details.username}</h6>
@@ -96,7 +96,7 @@ export default function Lobby({ wsocket, data }) {
                         <td>${StakedAmount}</td>
                         <td>{HostUserName}</td>
                         <td>
-                          <Link href={`/join/${GameID}`}>
+                          <Link passHref  href={`/join/${GameID}`}>
                             <button className="btn btn-info btn-sm">Join</button>
                           </Link>
                         </td>

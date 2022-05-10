@@ -108,7 +108,7 @@ export default function Game({ id }) {
 
   return (
     <main className="container-fluid gamewindow bg-black text-white mx-auto">
-      <Link href={"/"} ><button className="btn btn-danger m-4">Rage Quit</button></Link>
+      <Link passHref  href={"/"} ><button className="btn btn-danger m-4">Rage Quit</button></Link>
       {data &&
         <>
 
@@ -164,7 +164,7 @@ export default function Game({ id }) {
               </dl>
               <form onSubmit={(e) => SendMessage(e)} className="d-flex">
                 <input id="msg" className="form-control" type="text" required />
-                <button className="btn btn-dark" type="submit"><span class="material-icons">send</span></button>
+                <button className="btn btn-dark" type="submit"><span className="material-icons">send</span></button>
               </form>
             </div>
 
