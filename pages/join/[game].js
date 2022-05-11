@@ -64,7 +64,7 @@ export default function Game({ id }) {
   }, [])
 
 
-  function Play(e, idx) {
+  function Play(idx) {
     if (id) {
       if (data.Winner != "") {
         let name = localStorage.getItem(USERNAME) == data.Winner ? "You" : data.Winner
