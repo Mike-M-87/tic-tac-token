@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 export default function Board() {
-  const [mainboard, setBoard] = useState(Array(9).fill("."))
+  const [mainboard, setBoard] = useState(Array(9).fill(" "))
   const [current, setCurrent] = useState("X")
   const winstates = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
 
@@ -16,7 +16,7 @@ export default function Board() {
       alert("Player " + current + "  Wins")
       window.location.reload()
 
-    } else if (!board.includes(".")) {
+    } else if (!board.includes(" ")) {
       alert("Game Draw")
       window.location.reload()
     }
@@ -50,7 +50,7 @@ export default function Board() {
   return (
     <div className="grid-container">
       {mainboard.map((value, index) => (
-        <button key={index} onClick={(e) => Play(e)} className="grid-item" value={index}>{value}</button>
+        <button key={index} onClick={(e) => Play(e)} className="grid-item bg-transparent" value={index}>{value}</button>
       ))}
     </div>
   )

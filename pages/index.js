@@ -52,7 +52,6 @@ export default function Home() {
         alert(r.error)
         window.location.assign("/")
       }
-
     };
 
     ws.onclose = function (event) {
@@ -73,12 +72,9 @@ export default function Home() {
     }
   }, [])
 
-
-
   return (
     <>
       <p>{msg}</p>
-      <p className="text-center"></p>
       <Lobby wsocket={ws} data={lobbyData} />
     </>
   )

@@ -16,21 +16,18 @@ a {
 }
 
 .grid-container {
-  height: 300px;
-  width: 500px;
   margin: auto;
   display: grid;
   grid-template-columns: auto auto auto;
-  background-color: #2196f3;
-  padding: 10px;
+  width: 300px;
 }
 .grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  color: black;
-  padding: 20px;
-  font-size: 30px;
-  text-align: center;
+  font-size: 50px;
+  background-color: rgb(44, 49, 98);
+  color: white;
+  min-height: 100px;
+  min-width: 100px;
+  border: 1px solid white;
 }
 
 .login {
@@ -42,7 +39,7 @@ a {
 }
 
 .chatlist {
-  height: 90%;
+  height: 85%;
   overflow: scroll;
 }
 
@@ -55,14 +52,23 @@ a {
   border-radius: 20px;
 }
 
-.gamewindow{
+.gamewindow {
   height: 100vh;
 }
 
+.gamecard {
+  width: 400px;
+  margin: auto;
+  padding: 2%;
+  background-color: rgb(41, 47, 84);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 20px;
+}
+
 @media only screen and (max-width: 800px) {
-  .grid-container {
-    width: 100%;
-  }
   .login {
     width: 100%;
   }
