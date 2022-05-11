@@ -190,7 +190,7 @@ export default function Game({ id }) {
               <h3>Host : {data.Host.Name}</h3>
               <span className="lead">Plays</span>
               <h4>Opponent : {data.Opponent ? data.Opponent.Name : ''}</h4>
-              <h4>Stake ${data.StakedAmount}</h4>
+              <h4>TotalStake ${data.StakedAmount * 2}</h4>
             </div>
 
             <div className="d-flex justify-content-center">
