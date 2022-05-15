@@ -1,9 +1,6 @@
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import Board from "../../components/board";
-import Lobby from "../../components/lobby";
 import Profile from "../../components/profile";
-import { myIp, serverPort, USERID, USERNAME, USERTOKEN } from "../../constants";
+import { USERID, USERNAME, USERTOKEN, wsURL } from "../../constants";
 
 let ws
 
@@ -22,7 +19,8 @@ export default function Game({ id }) {
 
   function connect() {
     if (typeof window == "undefined") { return }
-    let url = `ws://${myIp}:${serverPort}/ws/${localStorage.getItem(USERID)}`;
+    let url = `${wsURL}/${localStorage.getItem(USERID)}`;
+    
     ws = new WebSocket(url);
 
     ws.onopen = function (event) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { myIp, serverPort, USERID, USERNAME, USERTOKEN } from "../constants";
+import { wsURL, USERID, USERNAME, USERTOKEN } from "../constants";
 import Lobby from "../components/lobby";
 import Login from "./login";
 
@@ -13,7 +13,7 @@ export default function Home() {
 
   function connect(userId) {
     if (typeof window == "undefined") { return }
-    let url = `ws://${myIp}:${serverPort}/ws/${userId}`;
+    let url = `${wsURL}/${userId}`;
     ws = new WebSocket(url);
 
     ws.onopen = function (event) {
