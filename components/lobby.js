@@ -5,9 +5,8 @@ import { _makeRequest } from "./network";
 import Profile from "./profile";
 
 
-export default function Lobby({ wsocket, data }) {
+export default function Lobby({ data }) {
   const [searchTerm, setSearch] = useState('')
-
 
   async function CreateGame(e) {
     e.preventDefault()
@@ -52,7 +51,7 @@ export default function Lobby({ wsocket, data }) {
             </form>
 
             <div className="table-responsive">
-              <table className="table table-hover table-striped table-dark">
+              <table className="table table-hover table-dark">
                 <thead className="table-warning">
                   <tr>
                     <th>Game ID</th>
@@ -67,7 +66,7 @@ export default function Lobby({ wsocket, data }) {
                       Status !== "complete" ?
                         <tr key={GameID}>
                           <td>{GameID}</td>
-                          <td>${StakedAmount}</td>
+                          <td>${StakedAmount*2}</td>
                           <td>{HostUserName}</td>
                           <td>
                             <Link passHref href={`/join/${GameID}`}>

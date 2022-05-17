@@ -14,7 +14,9 @@ export default function SignUp() {
 
     const body = {
       username: e.target["name"].value,
-      password: e.target["password"].value
+      password: e.target["password"].value,
+      phone: e.target["phone"].value,
+      email: e.target["email"].value,
     };
     const response = await _makeRequest({ url: signupURL, reqBody: body })
 
@@ -37,6 +39,11 @@ export default function SignUp() {
           <p className="text-danger">{err}</p>
           <label htmlFor="name" className="form-label">Username: </label>
           <input type="text" className="form-control" id="name" required />
+          <label htmlFor="email" className="form-label">Email: </label>
+          <input type="email" className="form-control" id="email" required />
+          <label htmlFor="phone" className="form-label">Phone: </label>
+          <input type="name" minLength={10} maxLength={10} className="form-control" id="phone" required />
+
           <label htmlFor="password" className="form-label">Password: </label>
           <input type="password" className="form-control" id="password" required />
 
@@ -48,7 +55,7 @@ export default function SignUp() {
           </button>
 
 
-          <Link passHref  href="/login">
+          <Link passHref href="/login">
             <button type="button"
               className="btn text-lg text-primary text-decoration-underline form-control">
               Login Instead?

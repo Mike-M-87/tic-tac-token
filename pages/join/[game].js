@@ -170,20 +170,11 @@ export default function Game({ id }) {
         <Profile />
       </div>
 
+
+
       {data &&
         <>
-          <div className="gamecard mt-3">
-            <span className={"p-2 rounded my-3 " + fetchTheme().titleColor}>{fetchTheme().titleText}</span>
-            {data.GameBoard &&
-              <div className="grid-container my-3">
-                {data.GameBoard.map((value, index) => (
-                  <button key={index} className="grid-item" onClick={(e) => Play(index)}>{value == 0 ? "X" : value == 1 ? "O" : " "}</button>
-                ))}
-              </div>
-            }
-          </div>
-
-          <div className="d-grid gap-1">
+          <div className="d-grid ">
             <h3 className="text-center">Game {data.GameID}</h3>
 
             <div className="d-flex flex-wrap justify-content-around">
@@ -199,12 +190,25 @@ export default function Game({ id }) {
             </div>
 
             <h4>Invite Others to watch</h4>
-            <input className="w-50" readOnly onClick={(e) => {
+            <input className="form-control" readOnly onClick={(e) => {
               e.target.select();
               document.execCommand('copy');
             }} value={data.GameID} />
-
           </div>
+
+
+          <div className="gamecard mt-3">
+            <span className={"p-2 rounded my-3 " + fetchTheme().titleColor}>{fetchTheme().titleText}</span>
+            {data.GameBoard &&
+              <div className="grid-container my-3">
+                {data.GameBoard.map((value, index) => (
+                  <button key={index} className="grid-item" onClick={(e) => Play(index)}>{value == 0 ? "X" : value == 1 ? "O" : " "}</button>
+                ))}
+              </div>
+            }
+          </div>
+
+
 
 
           <div className="offcanvas bg-dark offcanvas-end my-4 mx-md-3 rounded-3" id="chatbox">

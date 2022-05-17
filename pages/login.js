@@ -43,7 +43,7 @@ export default function Login() {
           <input type="password" className="form-control" id="password" />
 
           <button type="button" disabled
-            className="btn text-lg text-muted text-decoration-underline">
+            className="btn text-lg text-muted text-decoration-underline btn-outline-white">
             Forgot Password?
           </button>
 

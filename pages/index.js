@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { myIp, serverPort, USERID, USERNAME, USERTOKEN } from "../constants";
 import Lobby from "../components/lobby";
 import Login from "./login";
+import Deposit from "../components/deposit";
 
 
 export let ws;
@@ -74,8 +75,9 @@ export default function Home() {
 
   return (
     <>
+      <Deposit />
       <p>{msg}</p>
-      <Lobby wsocket={ws} data={lobbyData} />
+      <Lobby data={lobbyData} />
     </>
   )
 }
