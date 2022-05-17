@@ -32,14 +32,14 @@ export default function Deposit() {
 
   return (
     <>
-      <div aria-live="polite" aria-atomic="true" class="d-flex position-absolute justify-content-center align-items-center w-100">
-        <div class={"toast " + (msg !== "" ? "show" : "")} role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header">
-            <strong class="me-auto">{name}</strong>
+      <div aria-live="polite" aria-atomic="true" className="d-flex position-absolute justify-content-center align-items-center w-100">
+        <div className={"toast " + (msg !== "" ? "show" : "")} role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-header">
+            <strong className="me-auto">{name}</strong>
             <small>FlutterWave</small>
-            <button type="button" class="btn-close" onClick={(e) => window.location.assign("/")} aria-label="Close"></button>
+            <button type="button" className="btn-close" onClick={(e) => window.location.assign("/")} aria-label="Close"></button>
           </div>
-          <div class="toast-body">
+          <div className="toast-body">
             {msg}
           </div>
         </div>
