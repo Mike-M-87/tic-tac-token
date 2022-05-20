@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Board from "../../components/board";
+import Icon from "../../components/Icon";
 import Lobby from "../../components/lobby";
 import Profile from "../../components/profile";
 import { myIp, serverPort, USERID, USERNAME, USERTOKEN } from "../../constants";
@@ -130,15 +131,15 @@ export default function Game({ id }) {
         } else {
           switch (userid) {
             case winnerId:
-              style.titleText = ("YOU WON " + data.StakedAmount)
+              style.titleText = ("YOU WON " + data.StakedAmount * 2)
               style.titleColor = "bg-success"
               break;
             case data.Opponent.ID: case data.Host.ID:
-              style.titleText = ("YOU LOST " + data.StakedAmount)
+              style.titleText = ("YOU LOST " + data.StakedAmount * 2)
               style.titleColor = "bg-secondary"
               break;
             default:
-              style.titleText = (winnerName + " WON " + data.StakedAmount)
+              style.titleText = (winnerName + " WON " + data.StakedAmount * 2)
               style.titleColor = "bg-info"
               break;
           }
@@ -165,7 +166,7 @@ export default function Game({ id }) {
   }
 
   return (
-    <main className="container-fluid gamewindow bg-black text-white mx-auto">
+    <main className="container-fluid gamewindow  mx-auto">
       <div className="d-flex justify-content-between">
         <button onClick={(e) => window.location.assign("/")} className="btn btn-danger m-4">Quit</button>
         <Profile />
@@ -174,50 +175,46 @@ export default function Game({ id }) {
 
       {data &&
         <>
-          <div className="d-grid ">
-            <h3 className="text-center">Game {data.GameID}</h3>
+          <div className="d-flex justify-content-around flex-wrap align-items-center">
+            <div className="card p-2">
+              <h4 className="text-center">Game {data.GameID}</h4>
+              <h5>Host : {data.Host.Name}</h5>
+              <h5>Opponent : {data.Opponent ? data.Opponent.Name : ''}</h5>
+              <h5>TotalStake ${data.StakedAmount * 2}</h5>
 
-            <div className="d-flex flex-wrap justify-content-around">
-              <h3>Host : {data.Host.Name}</h3>
-              <span className="lead">Plays</span>
-              <h4>Opponent : {data.Opponent ? data.Opponent.Name : ''}</h4>
-              <h4>TotalStake ${data.StakedAmount * 2}</h4>
-            </div>
-
-            <div className="d-flex justify-content-center">
-              <h4>Winner : </h4>
-              <h4 className="mx-3"> {data.Winner ? data.Winner.Name : ""}</h4>
-            </div>
-
-            <h4>Invite Others to watch</h4>
-            <input className="form-control" readOnly onClick={(e) => {
-              e.target.select();
-              document.execCommand('copy');
-            }} value={data.GameID} />
-          </div>
-
-
-          <div className="gamecard mt-3">
-            <span className={"p-2 rounded my-3 " + fetchTheme().titleColor}>{fetchTheme().titleText}</span>
-            {data.GameBoard &&
-              <div className="grid-container my-3">
-                {data.GameBoard.map((value, index) => (
-                  <button key={index} className="grid-item" onClick={(e) => Play(index)}>{value == 0 ? "X" : value == 1 ? "O" : " "}</button>
-                ))}
+              <div className="d-flex">
+                <h5>Winner : </h5>
+                <h5 className="mx-3"> {data.Winner ? data.Winner.Name : "None"}</h5>
               </div>
-            }
+
+              <h6>Invite Others to watch</h6>
+              <input className="form-control" readOnly onClick={(e) => {
+                e.target.select();
+                document.execCommand('copy');
+              }} value={data.GameID} />
+            </div>
+
+            <div className="gamecard mt-3">
+              <span className={"p-2 rounded my-3 " + fetchTheme().titleColor}>{fetchTheme().titleText}</span>
+              {data.GameBoard &&
+                <div className="grid-container my-3">
+                  {data.GameBoard.map((value, index) => (
+                    <button key={index} className="grid-item" onClick={(e) => Play(index)}>{value == 0 ? "X" : value == 1 ? "O" : " "}</button>
+                  ))}
+                </div>
+              }
+            </div>
+
+            <button className="my-4  osition-absolute btn rounded-circle btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatbox">
+              <span className="material-icons pt-2">chat_bubble</span>
+            </button>
           </div>
 
-
-
-
-          <div className="offcanvas bg-dark offcanvas-end my-4 mx-md-3 rounded-3" id="chatbox">
-
+          <div className="offcanvas offcanvas-end my-md-4 mx-md-3 rounded-5" id="chatbox">
             <div className="offcanvas-header">
               <h3 className="offcanvas-title">Game Chat</h3>
               <button type="button" className="btn-close text-white" data-bs-dismiss="offcanvas"></button>
             </div>
-
             <div className="offcanvas-body">
               <dl className="chatlist" id="mychat">
                 {data.Chat && data.Chat.map(({ SenderName, Text }, index) => (
@@ -229,16 +226,10 @@ export default function Game({ id }) {
               </dl>
               <form onSubmit={(e) => SendMessage(e)} className="d-flex">
                 <input id="msg" className="form-control" type="text" required />
-                <button className="btn btn-dark" type="submit"><span className="material-icons">send</span></button>
+                <button className="btn ps-2 ms-1 btn-sm " type="submit"><Icon n="send" styles="mt-2" /></button>
               </form>
             </div>
-
           </div>
-
-
-          <button className="float-end mx-5 my-3 btn rounded-circle btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatbox">
-            <span className="material-icons pt-2">chat_bubble</span>
-          </button>
 
         </>
       }

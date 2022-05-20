@@ -13,7 +13,7 @@ import {
 import { chain, createClient, WagmiProvider } from "wagmi";
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+  [chain.mainnet, chain.polygon],
   [apiProvider.alchemy(process.env.ALCHEMY_ID), apiProvider.fallback()]
 );
 
@@ -31,12 +31,19 @@ const wagmiClient = createClient({
 export default function Connect() {
   return (
     <WagmiProvider client={wagmiClient}>
-      <RainbowKitProvider chains={chains}
-        theme={midnightTheme()}>
+      <RainbowKitProvider
+        chains={chains}
+        showRecentTransactions={true}
+        theme={darkTheme({
+          ...darkTheme.accentColors.orange,
+          accentColorForeground: "white"
+        })}
+        coolMode
+      >
         <ConnectButton
           label="Connect"
           showBalance={{ smallScreen: false, largeScreen: true }}
-          accountStatus={{ smallScreen: "address", largeScreen: "full" }}
+          accountStatus={{ smallScreen: "avatar", largeScreen: "full" }}
           chainStatus={{ smallScreen: "icon", largeScreen: "full" }}
         />
       </RainbowKitProvider>

@@ -11,7 +11,7 @@ export default function Profile() {
   const [details, setDetails] = useState(null)
   const [rates, setRates] = useState(null)
   const [amount, setAmount] = useState(0)
-  const [rainbowD, setRainbowd] = useState(false)
+  const [rainbowD, setRainbowd] = useState(true)
 
   useEffect(() => {
     async function GetDetails() {
@@ -68,7 +68,10 @@ export default function Profile() {
           <span className="text-success">${details ? details.balance : "0"}</span>
         </div>
         {details ?
-          <button className="btn btn-dark px-3 rounded-4" data-bs-toggle="modal" data-bs-target="#depositmodal">Deposit</button>
+          <div className="d-flex flex-wrap gap-2">
+            <button className="btn btn-dark px-3 rounded-4" data-bs-toggle="modal" data-bs-target="#depositmodal">Deposit</button>
+            {rainbowD && <Connect />}
+          </div>
           :
           <button className="btn btn-dark" onClick={(e) => Goto("/login")}>Login</button>
         }
@@ -92,7 +95,7 @@ export default function Profile() {
                   <label htmlFor="usdt" className="mt-2 form-label">USDT</label>
                   <input className="form-control" id="usdt" placeholder={1000 / rates} value={parseFloat(amount / rates).toFixed(2) + " USDT"} readOnly />
                   <div className="d-flex justify-content-between mt-3">
-                    <button type="button" className="btn text-light btn-outline-none" data-bs-dismiss="modal" onClick={(e) => setRainbowd(!rainbowD)}>Connect External Address?</button>
+                    <button type="button" className="btn text-light btn-outline-none" data-bs-dismiss="modal" onClick={(e) => setRainbowd(!rainbowD)}>{rainbowD ? "Disconnect External Address" : "Connect External Address?"}</button>
                     <button type="submit" className="btn btn-light">Deposit</button>
                   </div>
 
@@ -106,12 +109,6 @@ export default function Profile() {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="d-flex justify-content-end">
-        {rainbowD &&
-          <Connect />
-        }
       </div>
 
     </>
