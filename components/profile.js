@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { depositURL, DetailsURL, ratesURL, USERTOKEN } from "../constants";
 import { Goto, LocalGet } from "../helpers";
 import Connect from "./connect";
+import Icon from "./Icon";
 import { _makeRequest } from "./network";
 
 
@@ -87,7 +88,7 @@ export default function Profile() {
                 <form onSubmit={(e) => DepositCash(e)} className="d-grid gap-2">
                   <label htmlFor="amount" className="fs-italic form-label">Amount in Kes</label>
                   <input type="number" className="form-control" id="amount" placeholder="Kes 1000" onChange={(e) => setAmount(e.target.value)} />
-                  <span class="material-icons mt-2 fs-1 fw-bold">swap_vert</span>
+                  <Icon n="swap_vert" styles="fs-2 fw-bold mt-3" />
                   <label htmlFor="usdt" className="mt-2 form-label">USDT</label>
                   <input className="form-control" id="usdt" placeholder={1000 / rates} value={parseFloat(amount / rates).toFixed(2) + " USDT"} readOnly />
                   <div className="d-flex justify-content-between mt-3">
