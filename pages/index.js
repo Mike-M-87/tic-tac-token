@@ -4,9 +4,7 @@ import Lobby from "../components/lobby";
 import Login from "./login";
 import Deposit from "../components/deposit";
 
-
 export let ws;
-
 
 export default function Home() {
   const [lobbyData, setLobbyData] = useState([])
@@ -49,6 +47,7 @@ export default function Home() {
         }
         setLobbyData(lobby)
       }
+
       if (r.event == "error.info") {
         alert(r.error)
         window.location.assign("/")

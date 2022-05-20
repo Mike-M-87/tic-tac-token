@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { depositURL, DetailsURL, ratesURL, USERTOKEN } from "../constants";
 import { Goto, LocalGet } from "../helpers";
+import Connect from "./connect";
 import { _makeRequest } from "./network";
 
 
@@ -9,6 +10,7 @@ export default function Profile() {
   const [details, setDetails] = useState(null)
   const [rates, setRates] = useState(null)
   const [amount, setAmount] = useState(0)
+  const [rainbowD, setRainbowd] = useState(false)
 
   useEffect(() => {
     async function GetDetails() {
@@ -50,7 +52,7 @@ export default function Profile() {
     if (response.success) {
       console.log(response);
       const flwlink = response.body["PaymentLink"]
-      window.open(flwlink,"_self").focus();
+      window.open(flwlink, "_self").focus();
     } else {
       console.log(response);
     }
@@ -65,15 +67,15 @@ export default function Profile() {
           <span className="text-success">${details ? details.balance : "0"}</span>
         </div>
         {details ?
-          <button className="btn btn-dark" data-bs-toggle="modal" data-bs-target="#depositmodal">Deposit</button>
+          <button className="btn btn-dark px-3 rounded-4" data-bs-toggle="modal" data-bs-target="#depositmodal">Deposit</button>
           :
           <button className="btn btn-dark" onClick={(e) => Goto("/login")}>Login</button>
         }
       </div>
 
       <div className="modal fade" id="depositmodal">
-        <div className="modal-dialog rounded-4" data-bs-backdrop="static">
-          <div className="modal-content bg-dark text-light">
+        <div className="modal-dialog rounded-5">
+          <div className="modal-content bg-black text-light">
 
             <div className="modal-header">
               <h4 className="modal-title">Deposit</h4>
@@ -85,9 +87,14 @@ export default function Profile() {
                 <form onSubmit={(e) => DepositCash(e)} className="d-grid gap-2">
                   <label htmlFor="amount" className="fs-italic form-label">Amount in Kes</label>
                   <input type="number" className="form-control" id="amount" placeholder="Kes 1000" onChange={(e) => setAmount(e.target.value)} />
+                  <span class="material-icons mt-2 fs-1 fw-bold">swap_vert</span>
                   <label htmlFor="usdt" className="mt-2 form-label">USDT</label>
-                  <input type="number" className="form-control" id="usdt" placeholder={1000 / rates} value={parseFloat(amount / rates).toFixed(2)} readOnly />
-                  <button type="submit" className="btn btn-light ms-auto d-block mt-3">Deposit</button>
+                  <input className="form-control" id="usdt" placeholder={1000 / rates} value={parseFloat(amount / rates).toFixed(2) + " USDT"} readOnly />
+                  <div className="d-flex justify-content-between mt-3">
+                    <button type="button" className="btn text-light btn-outline-none" data-bs-dismiss="modal" onClick={(e) => setRainbowd(!rainbowD)}>Connect External Address?</button>
+                    <button type="submit" className="btn btn-light">Deposit</button>
+                  </div>
+
                 </form>
                 :
                 <div>
@@ -99,6 +106,13 @@ export default function Profile() {
           </div>
         </div>
       </div>
+
+      <div className="d-flex justify-content-end">
+        {rainbowD &&
+          <Connect />
+        }
+      </div>
+
     </>
   )
 }

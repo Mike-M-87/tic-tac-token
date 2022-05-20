@@ -72,15 +72,16 @@ export default function Game({ id }) {
         let name = localStorage.getItem(USERID) == data.Winner.ID ? "You" : data.Winner.Name
         alert(name + " already won")
         return
-      }
-      let subMessage = JSON.stringify({
-        event: "sub.play",
-        gameid: id,
-        player: localStorage.getItem(USERID),
-        playposition: idx.toString()
-      });
-      if (ws.readyState) {
-        ws.send(subMessage);
+      } else {
+        let subMessage = JSON.stringify({
+          event: "sub.play",
+          gameid: id,
+          player: localStorage.getItem(USERID),
+          playposition: idx.toString()
+        });
+        if (ws.readyState) {
+          ws.send(subMessage);
+        }
       }
     }
   }
@@ -104,7 +105,7 @@ export default function Game({ id }) {
   function updateScroll() {
     var element = document.getElementById("mychat");
     if (element) {
-      element.scrollTop = element.scrollHeight;
+      element.scrollTop = element.scrollHeight + 50;
     }
   }
 
@@ -169,7 +170,6 @@ export default function Game({ id }) {
         <button onClick={(e) => window.location.assign("/")} className="btn btn-danger m-4">Quit</button>
         <Profile />
       </div>
-
 
 
       {data &&
