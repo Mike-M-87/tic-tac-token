@@ -127,7 +127,7 @@ export default function Game({ id }) {
         let winnerId = data.Winner.ID
         if (winnerId == "Draw") {
           style.titleText = "GAME DRAW"
-          style.titleColor = "bg-info"
+          style.titleColor = "accentcolor"
         } else {
           switch (userid) {
             case winnerId:
@@ -140,7 +140,7 @@ export default function Game({ id }) {
               break;
             default:
               style.titleText = (winnerName + " WON " + data.StakedAmount * 2)
-              style.titleColor = "bg-info"
+              style.titleColor = "accentcolor"
               break;
           }
         }

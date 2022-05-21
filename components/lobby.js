@@ -51,30 +51,31 @@ export default function Lobby({ data }) {
             </form>
 
             <div className="table-responsive">
-              <table className="table table-hover table-dark">
-                <thead className="table-warning">
+              <table className="table table-borderless lobby-table text-light">
+                <thead>
                   <tr>
+                    <th>No.</th>
                     <th>Game ID</th>
-                    <th>Stake Prize</th>
+                    <th>Stake Pool Prize</th>
                     <th>Host</th>
                     <th>Play</th>
                   </tr>
                 </thead>
                 {data &&
                   <tbody>
-                    {searcher(data, searchTerm).map(({ Status, GameID, HostUserName, StakedAmount }) => (
+                    {searcher(data, searchTerm).map(({ Status, GameID, HostUserName, StakedAmount }, index) => (
                       Status !== "complete" ?
                         <tr key={GameID}>
-                          <td>{GameID}</td>
-                          <td>${StakedAmount*2}</td>
+                          <td>{index + 1}</td>
+                          <td>#{GameID}</td>
+                          <td className="moneybox">${(StakedAmount*2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                           <td>{HostUserName}</td>
                           <td>
                             <Link passHref href={`/join/${GameID}`}>
-                              <button className="btn btn-info btn-sm">Join</button>
+                              <button className="join-button">Join</button>
                             </Link>
                           </td>
-                        </tr>
-                        : ""
+                        </tr> : ""
                     ))}</tbody>
                 }
               </table>

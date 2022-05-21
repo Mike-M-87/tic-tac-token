@@ -15,6 +15,12 @@ a {
   box-sizing: border-box;
 }
 
+:root {
+  --maincolor: rgb(29, 28, 39);
+  --accentcolor: rgb(235, 140, 72);
+  --moneycolor : lightgreen;
+}
+
 .grid-container {
   margin: auto;
   display: grid;
@@ -23,7 +29,7 @@ a {
 }
 .grid-item {
   font-size: 50px;
-  background-color: rgb(44, 49, 98);
+  background-color: var(--maincolor);
   color: white;
   min-height: 100px;
   min-width: 100px;
@@ -60,12 +66,40 @@ a {
   width: 400px;
   margin: auto;
   padding: 2%;
-  background-color: rgb(50, 56, 93);
+  background-color: var(--maincolor);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   border-radius: 20px;
+}
+
+.lobby-table {
+  background-color: var(--maincolor);
+  border-radius: 10px;
+}
+
+.join-button {
+  background-color: var(--accentcolor);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+.moneybox {
+  color: var(--moneycolor);
+}
+
+.maincolor {
+  background-color: var(--maincolor);
+}
+.accentcolor {
+  background-color: var(--accentcolor);
 }
 
 @media only screen and (max-width: 800px) {

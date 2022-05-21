@@ -11,7 +11,6 @@ export default function Profile() {
   const [details, setDetails] = useState(null)
   const [rates, setRates] = useState(null)
   const [amount, setAmount] = useState(0)
-  const [rainbowD, setRainbowd] = useState(true)
 
   useEffect(() => {
     async function GetDetails() {
@@ -61,16 +60,16 @@ export default function Profile() {
 
   return (
     <>
-      <div className='gap-3 d-flex justify-content-end align-items-center'>
+      <div className='gap-3 d-flex justify-content-start align-items-center'>
         <span className="material-icons">face</span>
         <div className='text-start p-1'>
           <h6>{details && details.username || "Unknown"}</h6>
-          <span className="text-success">${details ? details.balance : "0"}</span>
+          <span className="text-success">${details ? details.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "0"}</span>
         </div>
         {details ?
-          <div className="d-flex flex-wrap gap-2">
+          <div className="d-flex flex-wrap gap-2 align-items-center">
             <button className="btn btn-dark px-3 rounded-4" data-bs-toggle="modal" data-bs-target="#depositmodal">Deposit</button>
-            {rainbowD && <Connect />}
+            <Connect/>
           </div>
           :
           <button className="btn btn-dark" onClick={(e) => Goto("/login")}>Login</button>
@@ -91,14 +90,13 @@ export default function Profile() {
                 <form onSubmit={(e) => DepositCash(e)} className="d-grid gap-2">
                   <label htmlFor="amount" className="fs-italic form-label">Amount in Kes</label>
                   <input type="number" className="form-control" id="amount" placeholder="Kes 1000" onChange={(e) => setAmount(e.target.value)} />
-                  <Icon n="swap_vert" styles="fs-2 fw-bold mt-3" />
+                  <Icon n="swap_vert" styles="fs-2 fw-bold mx-auto mt-3" />
                   <label htmlFor="usdt" className="mt-2 form-label">USDT</label>
                   <input className="form-control" id="usdt" placeholder={1000 / rates} value={parseFloat(amount / rates).toFixed(2) + " USDT"} readOnly />
                   <div className="d-flex justify-content-between mt-3">
-                    <button type="button" className="btn text-light btn-outline-none" data-bs-dismiss="modal" onClick={(e) => setRainbowd(!rainbowD)}>{rainbowD ? "Disconnect External Address" : "Connect External Address?"}</button>
-                    <button type="submit" className="btn btn-light">Deposit</button>
+                    <button type="submit" className="btn btn-light">Fiat</button>
+                    <button type="submit" className="btn btn-light">Crypto Wallet</button>
                   </div>
-
                 </form>
                 :
                 <div>
