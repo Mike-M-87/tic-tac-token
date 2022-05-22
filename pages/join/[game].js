@@ -225,7 +225,7 @@ export default function Game({ id }) {
                 ))}
               </dl>
               <form onSubmit={(e) => SendMessage(e)} className="d-flex">
-                <input id="msg" className="form-control" type="text" required />
+                <input id="msg" placeholder="Type Message Here" autoComplete="off" className="form-control" type="text" required />
                 <button className="btn ps-2 ms-1 btn-sm " type="submit"><Icon n="send" styles="mt-2" /></button>
               </form>
             </div>

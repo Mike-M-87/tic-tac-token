@@ -36,7 +36,7 @@ export default function Lobby({ data }) {
         <div className="d-lg-flex gap-3 justify-content-around align-items-start">
 
           <form onSubmit={(e) => CreateGame(e)}>
-            <button className="btn btn-dark my-2" type="submit">Create</button>
+            <button className="px-3 py-2 rounded-3 join-button my-2" type="submit">Create</button>
             <div className="form-floating">
               <input type="number" className="form-control" id="stake" placeholder="Enter Stake Prize" required />
               <label htmlFor="stake">Stake</label>
@@ -44,7 +44,7 @@ export default function Lobby({ data }) {
           </form>
 
 
-          <div className="flex-grow-1">
+          <div className="flex-grow-1 mt-3">
             <h3>LOBBY</h3>
             <form>
               <input className="form-control my-3" type="search" placeholder="Search" onChange={(e) => setSearch(e.target.value)} />

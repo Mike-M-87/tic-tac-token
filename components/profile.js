@@ -68,36 +68,40 @@ export default function Profile() {
         </div>
         {details ?
           <div className="d-flex flex-wrap gap-2 align-items-center">
-            <button className="btn btn-dark px-3 rounded-4" data-bs-toggle="modal" data-bs-target="#depositmodal">Deposit</button>
-            <Connect/>
+            <button className="px-3 py-2 rounded-3 join-button" data-bs-toggle="modal" data-bs-target="#depositmodal">Deposit</button>
           </div>
           :
-          <button className="btn btn-dark" onClick={(e) => Goto("/login")}>Login</button>
+          <button className="px-3 py-2 rounded-3 join-button" onClick={(e) => Goto("/login")}>Login</button>
         }
       </div>
 
       <div className="modal fade" id="depositmodal">
         <div className="modal-dialog rounded-5">
-          <div className="modal-content bg-black text-light">
+          <div className="modal-content">
 
             <div className="modal-header">
               <h4 className="modal-title">Deposit</h4>
-              <button type="button" data-bs-dismiss="modal"></button>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div className="modal-body">
               {details ?
-                <form onSubmit={(e) => DepositCash(e)} className="d-grid gap-2">
-                  <label htmlFor="amount" className="fs-italic form-label">Amount in Kes</label>
-                  <input type="number" className="form-control" id="amount" placeholder="Kes 1000" onChange={(e) => setAmount(e.target.value)} />
-                  <Icon n="swap_vert" styles="fs-2 fw-bold mx-auto mt-3" />
-                  <label htmlFor="usdt" className="mt-2 form-label">USDT</label>
-                  <input className="form-control" id="usdt" placeholder={1000 / rates} value={parseFloat(amount / rates).toFixed(2) + " USDT"} readOnly />
-                  <div className="d-flex justify-content-between mt-3">
-                    <button type="submit" className="btn btn-light">Fiat</button>
-                    <button type="submit" className="btn btn-light">Crypto Wallet</button>
+                <>
+                  <form onSubmit={(e) => DepositCash(e)} className="d-grid gap-2">
+                    <label htmlFor="amount" className="fs-italic form-label">Amount in Kes</label>
+                    <input min={1} max={999_999} defaultValue={0} type="number" className="form-control" id="amount" placeholder="e.g 1000" onChange={(e) => setAmount(e.target.value)} required />
+                    <Icon n="swap_vert" styles="fs-2 fw-bold mx-auto mt-1" />
+                    <label htmlFor="usdt" className="form-label">USDC</label>
+                    <input className="form-control" id="usdt" placeholder={1000 / rates} value={parseInt(amount / rates) + " USDC"} readOnly />
+                    <button type="submit" className="mt-3 fs-5 join-button">Checkout</button>
+                  </form>
+
+                  <div className="my-4 fs-6">
+                    <p>Wish To Deposit From External Address?</p>
+                    <p>Enter Amount to deposit and <strong>Connect Your Wallet</strong>, then click <strong>Send Transaction</strong> button below.</p>
                   </div>
-                </form>
+                  <Connect usdcAmt={parseInt(amount / rates)} />
+                </>
                 :
                 <div>
                   <p>Please Login to Deposit</p>

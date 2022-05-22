@@ -12,6 +12,8 @@ import {
 
 import { chain, createClient, useAccount, useContract, useContractRead, useContractWrite, useNetwork, useProvider, useSendTransaction, useSigner, WagmiProvider } from "wagmi";
 import { useEffect, useState } from "react";
+import LoadingScreen from "./loading";
+import { CardanoAddress, DestinationAddress, ETHAddress, USDCAddress } from "../constants";
 
 const { chains, provider } = configureChains(
   [chain.mainnet, chain.polygon],
@@ -19,7 +21,7 @@ const { chains, provider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
+  appName: "Tic Tac Token",
   chains
 });
 
@@ -29,22 +31,17 @@ const wagmiClient = createClient({
   provider
 });
 
-const RainbowD = () => {
-
+export function RainbowD({ usdcAmt }) {
   const [isMounted, setIsMounted] = useState(false);
   const { data: accountData } = useAccount();
-  useEffect(() => setIsMounted(true), []);
   const { activeChain } = useNetwork();
 
   const signer = useSigner()
   const provider = useProvider()
 
-  const arrr = {
-    args: ["ire.eth", 1],
-  }
-  const { data, isError, isLoading, write } = useContractWrite(
+  const { data, error, isIdle, isSuccess, isError, isLoading, write } = useContractWrite(
     {
-      addressOrName: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      addressOrName: USDCAddress,
       contractInterface: ERC20.abi,
       signerOrProvider: signer.data || provider,
     },
@@ -52,39 +49,46 @@ const RainbowD = () => {
   );
 
 
-  async function Transsssssfer() {
-    const d = await write({ args: ["saitama.eth", 1] });
+  async function TransferFunds(amount) {
+    if (amount <= 0) {
+      return
+    }
+    const fund = await write({ args: [DestinationAddress, amount] });
   }
+
+  if (isSuccess) {
+    console.log(data);
+  }
+  if (isError && error.message == "Connector not found") {
+    window.location.reload()
+  }
+
+
+  useEffect(() => setIsMounted(true), []);
 
   return (
     <>
-
-      <ConnectButton />
+      <ConnectButton
+        label="Connect Wallet"
+        accountStatus={{ smallScreen: "avatar", largeScreen: "full" }}
+        showBalance={true}
+        chainStatus={{ smallScreen: "icon", largeScreen: "full" }}
+      />
 
       {isMounted && (
         <>
-          <div style={{ fontFamily: "sans-serif" }}>
-            <h3>
-              Example Actions {!accountData && <span>(not connected)</span>}
-            </h3>
-            <div style={{ display: "flex", gap: 12, paddingBottom: 12 }}>
-              <button
-                className="btn btn-dark"
-                disabled={!accountData}
-                onClick={() => Transsssssfer()}
-                type="button"
-              >
-                Send Transaction
-              </button>
-
-            </div>
-            <div>
-              {data && (
-                <div>Tranfeering: {JSON.stringify(data)}</div>
-              )}
-              {isError && <div>Error sending transaction</div>}
-            </div>
+          <div className="text break ms-2">
+            {isLoading && <LoadingScreen />}
+            <p>{!accountData && <span>(not connected)</span>}</p>
+            <p>{isError && <span>Error sending transaction: {error.message}</span>}</p>
+            <p>{isIdle && <span>Waiting...</span>}</p>
           </div>
+          <button
+            className={accountData ? "fs-5 w-100 join-button" : "btn btn-secondary fs-5 w-100"}
+            disabled={!accountData}
+            onClick={() => TransferFunds(usdcAmt)}
+            type="button">Send Transaction
+          </button>
         </>
       )}
     </>
@@ -92,7 +96,7 @@ const RainbowD = () => {
 };
 
 
-export default function Connect() {
+export default function Connect({ usdcAmt }) {
   return (
     <WagmiProvider client={wagmiClient}>
       <RainbowKitProvider
@@ -104,7 +108,7 @@ export default function Connect() {
         })}
         coolMode
       >
-        <RainbowD />
+        <RainbowD usdcAmt={usdcAmt} />
       </RainbowKitProvider>
     </WagmiProvider>
   )
