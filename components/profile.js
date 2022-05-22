@@ -60,7 +60,7 @@ export default function Profile() {
 
   return (
     <>
-      <div className='gap-3 d-flex justify-content-start align-items-center'>
+      <div className='gap-3 d-flex justify-content-end me-3 align-items-center'>
         <span className="material-icons">face</span>
         <div className='text-start p-1'>
           <h6>{details && details.username || "Unknown"}</h6>
