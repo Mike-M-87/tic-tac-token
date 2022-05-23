@@ -42,14 +42,9 @@ export default function Login() {
           <label htmlFor="password" className="form-label">Password: </label>
           <input type="password" className="form-control" id="password" />
 
-          <button type="button" disabled
-            className="btn text-lg text-muted text-decoration-underline btn-outline-white">
-            Forgot Password?
-          </button>
-
           <button
             type="submit"
-            className={(loading ? " disabled " : " ") + "form-control py-2 text-center btn btn-dark"}>
+            className={(loading ? " disabled " : " ") + "form-control py-2 text-center btn btn-dark mt-2"}>
             {loading ? <span className="spinner-border spinner-border-sm"></span> : "Enter"}
           </button>
 

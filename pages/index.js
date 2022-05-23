@@ -4,7 +4,7 @@ import Lobby from "../components/lobby";
 import Login from "./login";
 import Deposit from "../components/deposit";
 
-export let ws;
+let ws;
 
 export default function Home() {
   const [lobbyData, setLobbyData] = useState([])
@@ -12,7 +12,8 @@ export default function Home() {
 
   function connect(userId) {
     if (typeof window == "undefined") { return }
-    let url = `ws://${myIp}:${serverPort}/ws/${userId}`;
+    // let url = `ws://${myIp}:${serverPort}/ws/${userId}`;
+    let url = `wss://${myIp}/ws/${userId}`;
     ws = new WebSocket(url);
 
     ws.onopen = function (event) {

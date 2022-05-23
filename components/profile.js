@@ -12,34 +12,35 @@ export default function Profile() {
   const [rates, setRates] = useState(null)
   const [amount, setAmount] = useState(0)
 
-  useEffect(() => {
-    async function GetDetails() {
-      if (LocalGet(USERTOKEN)) {
-        const body = {
-          token: localStorage.getItem(USERTOKEN),
-        }
-        const response = await _makeRequest({ url: DetailsURL, reqBody: body })
-        if (response.success) {
-          setDetails(response.body)
-        } else {
-          alert(response.errorMessage)
-        }
+  async function GetDetails() {
+    if (LocalGet(USERTOKEN)) {
+      const body = {
+        token: localStorage.getItem(USERTOKEN),
+      }
+      const response = await _makeRequest({ url: DetailsURL, reqBody: body })
+      if (response.success) {
+        setDetails(response.body)
+      } else {
+        alert(response.errorMessage)
       }
     }
+  }
 
-    async function GetRates() {
-      try {
-        const response = await fetch("https://api.exchangerate-api.com/v4/latest/USD")
-        const parsedResp = await response.json();
-        const kes = parsedResp.rates["KES"]
-        setRates(kes)
-      } catch (error) {
-        console.log(error);
-      }
+  async function GetRates() {
+    try {
+      const response = await fetch("https://api.exchangerate-api.com/v4/latest/USD")
+      const parsedResp = await response.json();
+      const kes = parsedResp.rates["KES"]
+      setRates(kes)
+    } catch (error) {
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
     GetDetails()
     GetRates()
-  }, [])
+  },[])
 
   async function DepositCash(e) {
     e.preventDefault()

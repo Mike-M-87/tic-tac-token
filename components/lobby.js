@@ -27,6 +27,14 @@ export default function Lobby({ data }) {
     return arr.filter((obj) => JSON.stringify(obj).includes(filterKey));
   }
 
+  function EnterGame(game, stake) {
+    if (confirm(`Would you like to stake ${stake} ? `)) {
+      if (confirm("Are you sure you wish to join this game ?")) {
+        window.location.assign("/join/" + game)
+      }
+    }
+  }
+
   return (
     <>
       <main className="container-fluid">
@@ -58,22 +66,27 @@ export default function Lobby({ data }) {
                     <th>Game ID</th>
                     <th>Stake Pool Prize</th>
                     <th>Host</th>
+                    <th>Opponent</th>
                     <th>Play</th>
                   </tr>
                 </thead>
                 {data &&
                   <tbody>
-                    {searcher(data, searchTerm).map(({ Status, GameID, HostUserName, StakedAmount }, index) => (
+                    {searcher(data, searchTerm).map(({ Status, GameID, HostUserName, OpponentUserName, StakedAmount }, index) => (
                       Status !== "complete" ?
                         <tr key={GameID}>
                           <td>{index + 1}</td>
                           <td>#{GameID}</td>
                           <td className="moneybox">${(StakedAmount * 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-                          <td>{HostUserName}</td>
+                          <td className={HostUserName == localStorage.getItem(USERNAME) && "text-info"}>{HostUserName}</td>
+                          <td className={OpponentUserName == localStorage.getItem(USERNAME) && "text-info"}>{OpponentUserName && OpponentUserName}</td>
                           <td>
-                            <Link passHref href={`/join/${GameID}`}>
-                              <button className="join-button">Join</button>
-                            </Link>
+                            <button className="join-button p-1" onClick={(e) => EnterGame(GameID, StakedAmount)}>
+                              {HostUserName == localStorage.getItem(USERNAME) ||
+                                (OpponentUserName && OpponentUserName == localStorage.getItem(USERNAME)) ? "Play" :
+                                !OpponentUserName ? "Join" : "Watch"
+                              }
+                            </button>
                           </td>
                         </tr> : ""
                     ))}</tbody>

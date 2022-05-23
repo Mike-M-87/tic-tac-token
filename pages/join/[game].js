@@ -23,7 +23,8 @@ export default function Game({ id }) {
 
   function connect() {
     if (typeof window == "undefined") { return }
-    let url = `ws://${myIp}:${serverPort}/ws/${localStorage.getItem(USERID)}`;
+    // let url = `ws://${myIp}:${serverPort}/ws/${localStorage.getItem(USERID)}`;
+    let url = `wss://${myIp}/ws/${localStorage.getItem(USERID)}`;
     ws = new WebSocket(url);
 
     ws.onopen = function (event) {
