@@ -46,7 +46,7 @@ export default function Lobby({ data }) {
 
           <div className="flex-grow-1 mt-3">
             <h3>LOBBY</h3>
-            <form>
+            <form onSubmit={(e) => { e.preventDefault() }}>
               <input className="form-control my-3" type="search" placeholder="Search" onChange={(e) => setSearch(e.target.value)} />
             </form>
 
@@ -68,7 +68,7 @@ export default function Lobby({ data }) {
                         <tr key={GameID}>
                           <td>{index + 1}</td>
                           <td>#{GameID}</td>
-                          <td className="moneybox">${(StakedAmount*2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
+                          <td className="moneybox">${(StakedAmount * 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                           <td>{HostUserName}</td>
                           <td>
                             <Link passHref href={`/join/${GameID}`}>

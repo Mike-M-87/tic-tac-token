@@ -89,24 +89,25 @@ export default function Game({ id }) {
 
   function SendMessage(e) {
     e.preventDefault()
+    let msgtext = e.target["msg"].value
+    if (!msgtext.trim().length) { return }
     let subMessage = JSON.stringify({
       event: "sub.chat",
       gameid: id,
       sender: localStorage.getItem(USERNAME),
-      text: e.target["msg"].value
+      text: msgtext
     });
 
     if (ws.readyState) {
       ws.send(subMessage);
     }
     e.target["msg"].value = ""
-    updateScroll()
   }
 
   function updateScroll() {
     var element = document.getElementById("mychat");
     if (element) {
-      element.scrollTop = element.scrollHeight + 50;
+      element.scrollTop = element.scrollHeight;
     }
   }
 
@@ -165,6 +166,10 @@ export default function Game({ id }) {
     return style
   }
 
+  useEffect(() => {
+    updateScroll()
+  }, [data])
+
   return (
     <main className="container-fluid gamewindow  mx-auto">
       <div className="d-flex justify-content-between">
@@ -178,13 +183,20 @@ export default function Game({ id }) {
           <div className="d-flex justify-content-around flex-wrap align-items-center">
             <div className="card p-2">
               <h4 className="text-center">Game {data.GameID}</h4>
-              <h5>Host : {data.Host.Name}</h5>
-              <h5>Opponent : {data.Opponent ? data.Opponent.Name : ''}</h5>
-              <h5>TotalStake ${data.StakedAmount * 2}</h5>
-
-              <div className="d-flex">
-                <h5>Winner : </h5>
-                <h5 className="mx-3"> {data.Winner ? data.Winner.Name : "None"}</h5>
+              <div className="d-flex my-2 justify-content-between">
+                <div className="d-flex flex-column">
+                  <h5>Host</h5>
+                  <h5>Opponent</h5>
+                  <h5>TotalStake</h5>
+                  <h5>Winner</h5>
+                </div>
+                <div className="d-flex flex-column"><h5>-</h5><h5>-</h5><h5>-</h5><h5>-</h5></div>
+                <div className="d-flex flex-column">
+                  <h5>{data.Host.Name}</h5>
+                  <h5>{data.Opponent ? data.Opponent.Name : 'None'}</h5>
+                  <h5>${data.StakedAmount * 2}</h5>
+                  <h5>{data.Winner ? data.Winner.Name : "None"}</h5>
+                </div>
               </div>
 
               <h6>Invite Others to watch</h6>
@@ -199,7 +211,7 @@ export default function Game({ id }) {
               {data.GameBoard &&
                 <div className="grid-container my-3">
                   {data.GameBoard.map((value, index) => (
-                    <button key={index} className="grid-item" onClick={(e) => Play(index)}>{value == 0 ? "X" : value == 1 ? "O" : " "}</button>
+                    <button key={index} className="grid-item" onClick={(e) => Play(index)}>{value == 0 ? "X" : value == 1 ? "O" : ""}</button>
                   ))}
                 </div>
               }
@@ -210,20 +222,20 @@ export default function Game({ id }) {
             </button>
           </div>
 
-          <div className="offcanvas offcanvas-end my-md-4 mx-md-3 rounded-5" id="chatbox">
+          <div className="offcanvas offcanvas-end my-md-4 mx-md-3 rounded-4" id="chatbox">
             <div className="offcanvas-header">
               <h3 className="offcanvas-title">Game Chat</h3>
               <button type="button" className="btn-close text-white" data-bs-dismiss="offcanvas"></button>
             </div>
             <div className="offcanvas-body">
-              <dl className="chatlist" id="mychat">
+              <div className="chatlist" id="mychat">
                 {data.Chat && data.Chat.map(({ SenderName, Text }, index) => (
                   <div key={index}>
                     <dt className={SenderName == localStorage.getItem(USERNAME) ? "text-primary" : ""}>{SenderName == localStorage.getItem(USERNAME) ? "You" : SenderName}</dt>
                     <dd className="mx-1 d-flex text-break">{Text}</dd>
                   </div>
                 ))}
-              </dl>
+              </div>
               <form onSubmit={(e) => SendMessage(e)} className="d-flex">
                 <input id="msg" placeholder="Type Message Here" autoComplete="off" className="form-control" type="text" required />
                 <button className="btn ps-2 ms-1 btn-sm " type="submit"><Icon n="send" styles="mt-2" /></button>

@@ -53,6 +53,8 @@ export function RainbowD({ usdcAmt }) {
     if (amount <= 0) {
       return
     }
+    amount = amount * Math.pow(10,6)
+    console.log(amount);
     const fund = await write({ args: [DestinationAddress, amount] });
   }
 
