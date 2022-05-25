@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { _makeRequest } from "../components/network";
@@ -34,7 +35,10 @@ export default function SignUp() {
   return (
     <main className="container">
       <div className="card shadow login">
-
+        <div className="d-flex align-items-center justify-content-center">
+          <Image src={"/Ngamea_Logo.png"} width={100} height={50}></Image>
+          <h3>Ngamea Games Registration</h3>
+        </div>
         <form className="d-grid gap-3" onSubmit={(e) => AddUser(e)}>
           <p className="text-danger">{err}</p>
           <label htmlFor="name" className="form-label">Username: </label>
