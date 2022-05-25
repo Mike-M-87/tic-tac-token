@@ -36,7 +36,7 @@ export default function SignUp() {
     <main className="container">
       <div className="card shadow login">
         <div className="d-flex align-items-center justify-content-center">
-          <Image src={"/Ngamea_Logo.png"} width={100} height={50}></Image>
+          <Image src={"/Ngamea_Logo.png"} width={100} height={50} alt=""></Image>
           <h3>Ngamea Games Registration</h3>
         </div>
         <form className="d-grid gap-3" onSubmit={(e) => AddUser(e)}>

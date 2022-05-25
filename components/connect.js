@@ -16,7 +16,7 @@ import LoadingScreen from "./loading";
 import { CardanoAddress, DestinationAddress, ETHAddress, USDCAddress } from "../constants";
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.polygon],
+  [chain.mainnet, chain.polygon, chain.rinkeby, chain.arbitrum, chain.optimism],
   [apiProvider.alchemy(process.env.ALCHEMY_ID), apiProvider.fallback()]
 );
 
@@ -53,7 +53,7 @@ export function RainbowD({ usdcAmt }) {
     if (amount <= 0) {
       return
     }
-    amount = amount * Math.pow(10,6)
+    amount = amount * Math.pow(10, 6)
     console.log(amount);
     const fund = await write({ args: [DestinationAddress, amount] });
   }
