@@ -39,7 +39,7 @@ export default function Lobby({ data }) {
     <>
       <main className="container-fluid">
 
-        <Profile />
+        {/* <Profile /> */}
 
         <div className="d-lg-flex gap-3 justify-content-around align-items-start">
 

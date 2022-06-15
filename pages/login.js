@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Connect from "../components/connect";
 import { _makeRequest } from "../components/network";
 import { loginURL, USERID, USERNAME, USERTOKEN } from "../constants";
 
@@ -35,7 +36,7 @@ export default function Login() {
     <main className="container">
       <div className="card shadow login">
         <div className="d-flex align-items-center justify-content-center">
-          <Image src={"/Ngamea_Logo.png"} width={100} height={50}></Image>
+          <Image src={"/Ngamea_Logo.png"} alt="" width={100} height={50}></Image>
           <h3>Ngamea Games Login</h3>
         </div>
         <form onSubmit={(e) => LoginUser(e)} className="d-grid gap-3">
@@ -58,6 +59,8 @@ export default function Login() {
               Create Account Instead?
             </button>
           </Link>
+
+          {/* <Connect usdcAmt={1000} /> */}
 
         </form>
       </div>

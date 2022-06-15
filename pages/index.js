@@ -71,13 +71,14 @@ export default function Home() {
     } else {
       connect(localStorage.getItem(USERID))
     }
-  }, [])
+  },)
 
   return (
     <>
       <Deposit />
       <p>{msg}</p>
       <Lobby data={lobbyData} />
+      {/* <iframe className="w-100" height={1000} src="https://geco.vercel.app/index-2.html" allowTransparency frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe> */}
     </>
   )
 }

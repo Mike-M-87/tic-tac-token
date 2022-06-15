@@ -1,7 +1,7 @@
 export const USERID = "userId"
 export const USERNAME = "username"
 export const USERTOKEN = "token"
-export const myIp = "oyster-app-35tav.ondigitalocean.app";
+export const myIp = "https://tikkktaktoe.onrender.com";
 export const serverPort = "8090";
 
 // export const createGameURL = `http://${myIp}:${serverPort}/create`;
